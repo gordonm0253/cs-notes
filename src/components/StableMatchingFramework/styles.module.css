@@ -43,19 +43,17 @@
 
 .board {
   display: grid;
-  grid-template-columns: minmax(130px, 1fr) minmax(180px, 1.2fr) minmax(130px, 1fr);
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
   gap: 1rem;
   padding: 1.5rem;
 }
 
 .boardColumn,
-.proposalColumn,
 .panel {
   min-width: 0;
 }
 
 .boardColumn h3,
-.proposalColumn h3,
 .panel h3 {
   margin: 0 0 0.75rem;
   font-size: 1rem;
@@ -63,10 +61,11 @@
 
 .person {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  min-height: 56px;
+  min-height: 86px;
   margin-bottom: 0.75rem;
   padding: 0.8rem;
   border: 1px solid var(--ifm-color-emphasis-200);
@@ -74,7 +73,15 @@
   background: var(--ifm-background-color);
 }
 
-.person span {
+.personHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.personHeader > span {
   display: inline-grid;
   place-items: center;
   width: 32px;
@@ -95,43 +102,67 @@
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--ifm-color-primary) 18%, transparent);
 }
 
-.matchedPerson span {
+.matchedPerson .personHeader > span {
   background: var(--ifm-color-primary);
   color: var(--ifm-color-primary-contrast-foreground);
 }
 
-.proposalList {
-  min-height: 252px;
-  padding: 0.75rem;
-  border: 1px dashed var(--ifm-color-emphasis-300);
-  border-radius: 8px;
+.proposalTrail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  min-height: 30px;
 }
 
-.proposal {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 0.55rem;
-  margin-bottom: 0.5rem;
-  padding: 0.55rem 0.7rem;
-  border-radius: 8px;
-  background: var(--ifm-color-emphasis-100);
+.trailLabel {
+  flex-basis: 100%;
+  font-size: 0.72rem;
   font-weight: 700;
-  text-align: center;
+  text-transform: uppercase;
+}
+
+.proposalChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  min-height: 28px;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 999px;
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-emphasis-900);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.heldProposal {
+  border-color: var(--ifm-color-primary);
+  background: color-mix(in srgb, var(--ifm-color-primary) 16%, var(--ifm-background-color));
+  color: var(--ifm-color-primary);
+}
+
+.latestProposal {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ifm-color-primary) 20%, transparent);
 }
 
 .rejectedProposal {
+  border-color: #d45b45;
   color: #8a1f11;
   background: #ffe6df;
+  text-decoration: line-through;
 }
 
 [data-theme='dark'] .rejectedProposal {
+  border-color: #a94a39;
   color: #ffb5a5;
   background: #482019;
 }
 
-.emptyState {
-  margin: 0;
+.noProposal {
   color: var(--ifm-color-emphasis-700);
 }
 
@@ -253,9 +284,5 @@
   .board,
   .detailGrid {
     grid-template-columns: 1fr;
-  }
-
-  .proposalList {
-    min-height: 0;
   }
 }

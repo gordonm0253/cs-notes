@@ -2,99 +2,99 @@ import React, {useMemo, useState} from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.css';
 
-const suitors = ['A', 'B', 'C', 'D'];
-const reviewers = ['W', 'X', 'Y', 'Z'];
+const hospitals = ['H1', 'H2', 'H3', 'H4'];
+const residents = ['R1', 'R2', 'R3', 'R4'];
 
-const suitorPreferences = {
-  A: ['X', 'W', 'Y', 'Z'],
-  B: ['W', 'X', 'Z', 'Y'],
-  C: ['W', 'Y', 'X', 'Z'],
-  D: ['Y', 'Z', 'X', 'W'],
+const hospitalPreferences = {
+  H1: ['R2', 'R1', 'R3', 'R4'],
+  H2: ['R1', 'R2', 'R4', 'R3'],
+  H3: ['R1', 'R3', 'R2', 'R4'],
+  H4: ['R3', 'R4', 'R2', 'R1'],
 };
 
-const reviewerPreferences = {
-  W: ['C', 'B', 'A', 'D'],
-  X: ['A', 'B', 'D', 'C'],
-  Y: ['D', 'C', 'A', 'B'],
-  Z: ['B', 'D', 'C', 'A'],
+const residentPreferences = {
+  R1: ['H3', 'H2', 'H1', 'H4'],
+  R2: ['H1', 'H2', 'H4', 'H3'],
+  R3: ['H4', 'H3', 'H1', 'H2'],
+  R4: ['H2', 'H4', 'H3', 'H1'],
 };
 
 const steps = [
   {
     title: 'Start with everyone unmatched',
-    text: 'Each suitor will propose down their preference list until every reviewer holds one proposal.',
+    text: 'Each hospital proposes down its preference list until every resident holds one proposal.',
     proposals: [],
     matches: {},
-    activeSuitor: null,
+    activeHospital: null,
   },
   {
-    title: 'A proposes to X',
-    text: 'X is unmatched, so X holds A for now. A and X are tentatively matched.',
-    proposals: [['A', 'X']],
-    matches: {X: 'A'},
-    activeSuitor: 'A',
+    title: 'H1 proposes to R2',
+    text: 'R2 is unmatched, so R2 holds H1 for now. H1 and R2 are tentatively matched.',
+    proposals: [['H1', 'R2']],
+    matches: {R2: 'H1'},
+    activeHospital: 'H1',
   },
   {
-    title: 'B proposes to W',
-    text: 'W is unmatched, so W holds B. Tentative matches can still change later.',
+    title: 'H2 proposes to R1',
+    text: 'R1 is unmatched, so R1 holds H2. Tentative matches can still change later.',
     proposals: [
-      ['A', 'X'],
-      ['B', 'W'],
+      ['H1', 'R2'],
+      ['H2', 'R1'],
     ],
-    matches: {X: 'A', W: 'B'},
-    activeSuitor: 'B',
+    matches: {R2: 'H1', R1: 'H2'},
+    activeHospital: 'H2',
   },
   {
-    title: 'C proposes to W',
-    text: 'W prefers C over B, so W switches to C. B becomes unmatched again.',
+    title: 'H3 proposes to R1',
+    text: 'R1 prefers H3 over H2, so R1 switches to H3. H2 becomes unmatched again.',
     proposals: [
-      ['A', 'X'],
-      ['B', 'W'],
-      ['C', 'W'],
+      ['H1', 'R2'],
+      ['H2', 'R1'],
+      ['H3', 'R1'],
     ],
-    matches: {X: 'A', W: 'C'},
-    activeSuitor: 'C',
-    rejected: ['B', 'W'],
+    matches: {R2: 'H1', R1: 'H3'},
+    activeHospital: 'H3',
+    rejected: ['H2', 'R1'],
   },
   {
-    title: 'B proposes to X',
-    text: 'X prefers A over B, so X rejects B. B will keep moving down the list.',
+    title: 'H2 proposes to R2',
+    text: 'R2 prefers H1 over H2, so R2 rejects H2. H2 will keep moving down the list.',
     proposals: [
-      ['A', 'X'],
-      ['B', 'W'],
-      ['C', 'W'],
-      ['B', 'X'],
+      ['H1', 'R2'],
+      ['H2', 'R1'],
+      ['H3', 'R1'],
+      ['H2', 'R2'],
     ],
-    matches: {X: 'A', W: 'C'},
-    activeSuitor: 'B',
-    rejected: ['B', 'X'],
+    matches: {R2: 'H1', R1: 'H3'},
+    activeHospital: 'H2',
+    rejected: ['H2', 'R2'],
   },
   {
-    title: 'D proposes to Y',
-    text: 'Y is unmatched, so Y holds D. Only B remains unmatched.',
+    title: 'H4 proposes to R3',
+    text: 'R3 is unmatched, so R3 holds H4. Only H2 remains unmatched.',
     proposals: [
-      ['A', 'X'],
-      ['B', 'W'],
-      ['C', 'W'],
-      ['B', 'X'],
-      ['D', 'Y'],
+      ['H1', 'R2'],
+      ['H2', 'R1'],
+      ['H3', 'R1'],
+      ['H2', 'R2'],
+      ['H4', 'R3'],
     ],
-    matches: {X: 'A', W: 'C', Y: 'D'},
-    activeSuitor: 'D',
+    matches: {R2: 'H1', R1: 'H3', R3: 'H4'},
+    activeHospital: 'H4',
   },
   {
-    title: 'B proposes to Z',
-    text: 'Z is unmatched, so Z holds B. Everyone is matched and the algorithm terminates.',
+    title: 'H2 proposes to R4',
+    text: 'R4 is unmatched, so R4 holds H2. Everyone is matched and the algorithm terminates.',
     proposals: [
-      ['A', 'X'],
-      ['B', 'W'],
-      ['C', 'W'],
-      ['B', 'X'],
-      ['D', 'Y'],
-      ['B', 'Z'],
+      ['H1', 'R2'],
+      ['H2', 'R1'],
+      ['H3', 'R1'],
+      ['H2', 'R2'],
+      ['H4', 'R3'],
+      ['H2', 'R4'],
     ],
-    matches: {X: 'A', W: 'C', Y: 'D', Z: 'B'},
-    activeSuitor: 'B',
+    matches: {R2: 'H1', R1: 'H3', R3: 'H4', R4: 'H2'},
+    activeHospital: 'H2',
   },
 ];
 
@@ -125,70 +125,110 @@ function PreferenceList({title, items, preferences, activeName}) {
 }
 
 function MatchingBoard({step}) {
-  const matchedSuitors = useMemo(
+  const matchedHospitals = useMemo(
     () => new Set(Object.values(step.matches)),
     [step.matches],
   );
-  const proposalSet = useMemo(
-    () => new Set(step.proposals.map(([from, to]) => `${from}-${to}`)),
+  const proposalsByHospital = useMemo(
+    () =>
+      step.proposals.reduce((groups, [hospital, resident]) => {
+        groups[hospital] = [...(groups[hospital] ?? []), resident];
+        return groups;
+      }, {}),
     [step.proposals],
   );
+  const proposalsByResident = useMemo(
+    () =>
+      step.proposals.reduce((groups, [hospital, resident]) => {
+        groups[resident] = [...(groups[resident] ?? []), hospital];
+        return groups;
+      }, {}),
+    [step.proposals],
+  );
+  const latestProposal = step.proposals[step.proposals.length - 1];
+  const latestKey = latestProposal ? `${latestProposal[0]}-${latestProposal[1]}` : null;
   const rejectedKey = step.rejected ? `${step.rejected[0]}-${step.rejected[1]}` : null;
 
   return (
     <section className={styles.board} aria-label="Stable matching proposal board">
       <div className={styles.boardColumn}>
-        <h3>Suitors</h3>
-        {suitors.map((suitor) => (
-          <div
-            className={clsx(
-              styles.person,
-              step.activeSuitor === suitor && styles.activePerson,
-              matchedSuitors.has(suitor) && styles.matchedPerson,
-            )}
-            key={suitor}>
-            <span>{suitor}</span>
-            <small>{matchedSuitors.has(suitor) ? 'matched' : 'free'}</small>
-          </div>
-        ))}
-      </div>
-
-      <div className={styles.proposalColumn}>
-        <h3>Proposal History</h3>
-        <div className={styles.proposalList}>
-          {step.proposals.length === 0 ? (
-            <p className={styles.emptyState}>No proposals yet.</p>
-          ) : (
-            step.proposals.map(([from, to], index) => {
-              const key = `${from}-${to}`;
-              return (
-                <div
-                  className={clsx(
-                    styles.proposal,
-                    rejectedKey === key && styles.rejectedProposal,
-                    proposalSet.has(key) && styles.seenProposal,
-                  )}
-                  key={`${key}-${index}`}>
-                  <span>{from}</span>
-                  <span aria-hidden="true">-&gt;</span>
-                  <span>{to}</span>
-                </div>
-              );
-            })
-          )}
-        </div>
+        <h3>Hospitals</h3>
+        {hospitals.map((hospital) => {
+          const proposedTo = proposalsByHospital[hospital] ?? [];
+          return (
+            <div
+              className={clsx(
+                styles.person,
+                step.activeHospital === hospital && styles.activePerson,
+                matchedHospitals.has(hospital) && styles.matchedPerson,
+              )}
+              key={hospital}>
+              <div className={styles.personHeader}>
+                <span>{hospital}</span>
+                <small>{matchedHospitals.has(hospital) ? 'matched' : 'free'}</small>
+              </div>
+              <div className={styles.proposalTrail} aria-label={`${hospital} proposals`}>
+                <small className={styles.trailLabel}>Proposed to</small>
+                {proposedTo.length === 0 ? (
+                  <small className={styles.noProposal}>No proposals yet</small>
+                ) : (
+                  proposedTo.map((resident) => {
+                    const key = `${hospital}-${resident}`;
+                    return (
+                      <span
+                        className={clsx(
+                          styles.proposalChip,
+                          latestKey === key && styles.latestProposal,
+                          rejectedKey === key && styles.rejectedProposal,
+                          step.matches[resident] === hospital && styles.heldProposal,
+                        )}
+                        key={key}>
+                        {resident}
+                      </span>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className={styles.boardColumn}>
-        <h3>Reviewers</h3>
-        {reviewers.map((reviewer) => {
-          const match = step.matches[reviewer];
+        <h3>Residents</h3>
+        {residents.map((resident) => {
+          const match = step.matches[resident];
+          const offers = proposalsByResident[resident] ?? [];
           return (
             <div
               className={clsx(styles.person, match && styles.matchedPerson)}
-              key={reviewer}>
-              <span>{reviewer}</span>
-              <small>{match ? `holding ${match}` : 'free'}</small>
+              key={resident}>
+              <div className={styles.personHeader}>
+                <span>{resident}</span>
+                <small>{match ? `holding ${match}` : 'free'}</small>
+              </div>
+              <div className={styles.proposalTrail} aria-label={`${resident} received offers`}>
+                <small className={styles.trailLabel}>Offers</small>
+                {offers.length === 0 ? (
+                  <small className={styles.noProposal}>No offers yet</small>
+                ) : (
+                  offers.map((hospital) => {
+                    const key = `${hospital}-${resident}`;
+                    return (
+                      <span
+                        className={clsx(
+                          styles.proposalChip,
+                          latestKey === key && styles.latestProposal,
+                          rejectedKey === key && styles.rejectedProposal,
+                          match === hospital && styles.heldProposal,
+                        )}
+                        key={key}>
+                        {hospital}
+                      </span>
+                    );
+                  })
+                )}
+              </div>
             </div>
           );
         })}
@@ -202,15 +242,15 @@ function MatchSummary({matches}) {
     <section className={styles.panel}>
       <h3>Current Matching</h3>
       <div className={styles.matchGrid}>
-        {reviewers.map((reviewer) => {
-          const suitor = matches[reviewer];
+        {residents.map((resident) => {
+          const hospital = matches[resident];
           return (
-            <div className={styles.matchCard} key={reviewer}>
-              <span>{reviewer}</span>
-              <strong>{suitor ?? '-'}</strong>
+            <div className={styles.matchCard} key={resident}>
+              <span>{resident}</span>
+              <strong>{hospital ?? '-'}</strong>
               <small>
-                {suitor
-                  ? `${reviewer} ranks ${suitor} #${rank(reviewerPreferences[reviewer], suitor)}`
+                {hospital
+                  ? `${resident} ranks ${hospital} #${rank(residentPreferences[resident], hospital)}`
                   : 'unmatched'}
               </small>
             </div>
@@ -263,15 +303,15 @@ export default function StableMatchingFramework() {
 
       <div className={styles.detailGrid}>
         <PreferenceList
-          title="Suitor Preferences"
-          items={suitors}
-          preferences={suitorPreferences}
-          activeName={step.activeSuitor}
+          title="Hospital Preferences"
+          items={hospitals}
+          preferences={hospitalPreferences}
+          activeName={step.activeHospital}
         />
         <PreferenceList
-          title="Reviewer Preferences"
-          items={reviewers}
-          preferences={reviewerPreferences}
+          title="Resident Preferences"
+          items={residents}
+          preferences={residentPreferences}
         />
         <MatchSummary matches={step.matches} />
       </div>

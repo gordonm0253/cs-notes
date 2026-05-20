@@ -8,9 +8,22 @@ import StableMatchingFramework from '@site/src/components/StableMatchingFramewor
 
 Stable matching is a framework for pairing two groups when each participant has ranked preferences over the other side. Classic examples include matching men to women or hospital to residents. We will use hospital and resident example in our notes.
 
-Given hospitals $h_1, \dots, h_n$ and residents $r_1, \dots, r_n$, each with a ranked preference list over the other side, we want to find a **stable**, **perfect** matching. Calling this matching $M = \{\}$, we want it to have two properties:
+We have hospitals $h_1, \dots, h_n$ and residents $r_1, \dots, r_n$, each with a ranked preference list over the other side. We want to find a matching $M$ (e.g. $M = \{(h_1, r_{16}), (h_{14}, r_7),  \dots \}$) satisfying two properties:
 
-- Perfect matching:
-- Stable matching: 
+- **Perfect**: All hospitals and residents appear exactly once in our final matching. Intuitively, no one is left unmatched and no one is assigned more than one partner.
+- **Stable**: There should be no unmatched pair who would both prefer each other over their assigned partners. Formally, there should be no **blocking pair**: a hospital-resident pair $(h, r) \notin M$ where $h$ prefers $r$ over its current resident $r'$ and $r$ prefers $h$ over its current hospital $h'$.
 
-When we have a stable is not just whether everyone can be matched, but whether the result is **stable**: there should be no unmatched pair who would both prefer each other over their assigned partners.
+# Gale-Shapley Algorithm
+
+```
+Initialize M = {}
+while there is an unmatched hospital h:
+    let r = first resident on h's list not yet proposed to
+    if r is unmatched:
+        add (h, r) to M
+    else if r prefers h to current match h':
+        remove (h', r) from M
+        add (h, r) to M
+end while
+output M
+```
