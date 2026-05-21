@@ -20,7 +20,7 @@ We have hospitals $h_1, \dots, h_n$ and residents $r_1, \dots, r_n$, each with a
 ```
 Initialize M = {}
 while there is an unmatched hospital h:
-    let r = first resident on h's list not yet proposed to
+    let r = first resident on h's list not yet offered to
     if r is unmatched:
         add (h, r) to M
     else if r prefers h to current match h':
@@ -38,6 +38,10 @@ output M
 
 We observe that no hospital $h$ makes an offer twice to any resident $r$. This follows from the description of the algorithm. There are at most $n^2$ proposals total. Each iteration of the while loop makes exactly one proposal, the algorithm terminates in $O(n^2)$ iterations.
 
+We can achieve $O(n^2)$ runtime with some preprocessing work. For each resident $r$, we create a lookup table `rank[r][h]` that gives the rank of $h$ in $r$'s preference list. This takes $O(n^2)$ time and space to build, and we can compare whether $r$ prefers $h$ or $h'$ by checking `rank[r][h] < rank[r][h']` in $O(1)$ time.  In addition, for each hospital, we maintain a pointer corresponding to the next resident on the list it will propose. 
+
+This computation will allow us to process each while loop iteration in $O(1)$ time. We take $O(n^2)$ time for setup, and $O(1)$ time for $O(n^2)$ possible proposals. Thus, our overall time complexity is $O(n^2)$. 
+
 ## Correctness
 
 We prove that Gale-Shapley produces a stable perfect matching. We show each of these properties separately; try them yourself before reading the solutions!
@@ -47,14 +51,21 @@ We prove that Gale-Shapley produces a stable perfect matching. We show each of t
 <details>
 <summary>Hint</summary>
 
-Suppose some hospital $h$ is unmatched at termination. How many proposals did $h$ make, and what does this imply about the residents?
+Suppose we don't have a perfect matching. If $h$ is unmatched at termination, what can you say about every resident on $h$'s preference list?
 
 </details>
 
 <details>
-<summary>Solution</summary>
+<summary>Proof</summary>
 
-Solution coming soon!
+We first observe that if a resident $r$ is matched at some step of Gale-Shapley, it remains matched (assuming hospitals are proposing). This follows from the fact that if resident $r$ is matched to some hospital $h$ at some point, it can only leave $h$ for a higher ranked $h'$. 
+
+Suppose by contradiction that some $h$ is unmatched at the end of G-S. This means that some resident $r$ is also unmatched. Since $h$ is unmatched at termination, it was never permanently accepted by an resident, meaning that it was rejected by every resident it offered to. Since the algorithm only terminates when no unmatched hospital has a resident left to offer to, $h$ must have exhausted its entire preference list. In particular, $h$ must have offered to $r$ at some point during the algorithm.
+
+- Case 1: $r$ was unmatched, and $h$ makes an offer to $r$. Then, $(h, r)$ becomes a pair in our matching. By our prior reasoning, once $r$ is matched, it remains matched until the end of G-S. This is a contradiction, since we assumed $r$ was unmatched at the end.
+- Case 2: $r$ is matched to some $h'$, and $h$ makes an offer to $r$. We observe that $r$ cannot be unmatched (because it must stay with $h'$ or be matched with $h$), so this is a contradiction again.
+
+Therefore, all $h$ are matched, so we have a perfect matching. $\square$
 
 </details>
 
@@ -66,6 +77,48 @@ Solution coming soon!
 Recall what it means for a pair $(h, r) \notin M$ to be a blocking pair. Argue by contradiction why no such pair can exist in the output of Gale-Shapley!
 
 </details>
+
+<details>
+<summary>Proof</summary>
+
+Suppose for contradiction's sake that $M$ is not stable. Then, there exists some pair $(h, r) \notin M$ such that $(h, r'), (h', r) \in M$ with $h > h'$ in $r$'s preference list and $r > r'$ in $h$'s preference list.
+
+We first observe that $h$ must have made an offer to $r$, since $(h, r')$ is a pair and $r > r'$ in $h$'s preference list. When $h$ made an offer to $r$, two things could have happened:
+
+- $r$ is unmatched. Then, $(h, r)$ are matched. If $(h', r)$ is in the final matching, this implies that $h' > h$ in $r$'s preference list (this is the only way that $r$ unmatches from $h$ and matches with $h'$). This is a contradiction, because we assumed $h > h'$ in $r$'s preference list. 
+- $r$ is matched (when $h$ offers to $r$). Suppose that $r$ is matched to some $h_2$. If $r: h > h_2$, $r$ leaves $h_2$ for $h$ and $(h, r)$ becomes a pair. This return the situation described above, which we know leads to a contradiction. Thus, we assume $r$ rejects $h$ and stays with $h_2$. This means that $h_2 > h > h'$ in $r$'s preference list by transitivity. But $r$ is matched to $h_2$ (or some other hospital that $r$ prefers even more) and would never downgrade to $h'$, contradicting that $(h', r) \in M$. 
+
+Therefore, we have no unstable pairs, and Gale-Shapley outputs a stable matching. $\square$
+
+</details>
+
+## Extensions
+
+In our visualization demo, we always chose the unmatched hospital with the lowest ID. But in reality, this doesn't matter; the output of Gale-Shapley is "unique", the output of Gale-Shapley is the same regardless of the order in which unmatched hospitals are chosen to propose.
+
+**Claim 3: The output is independent of hospital ordering.**
+
+<details>
+<summary>Proof</summary>
+
+Proof coming soon!
+
+</details>
+
+Since the output of G-S is independent of ordering, we can ask: which stable matching does it always produce? It turns out there is an answer to this!
+
+**Claim 4: Hospital-proposing G-S is hospital-optimal.**
+
+<details>
+<summary>Proof</summary>
+
+Proof coming soon!
+
+</details>
+
+## Practice
+
+**Problem 1.** (T/F) The output of Gale-Shapley is the same whether you have hospitals or residents offering. If true, provide a proof; if false, provide a counterexample.
 
 <details>
 <summary>Solution</summary>

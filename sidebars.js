@@ -18,20 +18,21 @@ const sidebars = {
   // By default, Docusaurus generates a sidebar from the docs folder structure
   tutorialSidebar: [
     'intro',
+    'notes/stable-matching',
+    'notes/greedy-algorithms',
+    'notes/dynamic-programming',
+    'notes/divide-and-conquer',
+    'notes/np-completeness',
+  ],
+  // But you can create a sidebar manually
+  /*
+  tutorialSidebar: [
+    'intro',
+    'hello',
     {
       type: 'category',
-      label: 'Algorithms Notes',
-      link: {
-        type: 'generated-index',
-        description: 'CS4820 notes organized around the major algorithmic ideas covered so far.',
-      },
-      items: [
-        'notes/stable-matching',
-        'notes/greedy-algorithms',
-        'notes/dynamic-programming',
-        'notes/divide-and-conquer',
-        'notes/np-completeness',
-      ],
+      label: 'Tutorial',
+      items: ['tutorial-basics/create-a-document'],
     },
     {
       type: 'category',
@@ -47,18 +48,6 @@ const sidebars = {
           dirName: 'tutorial-extras',
         },
       ],
-    },
-  ],
-
-  // But you can create a sidebar manually
-  /*
-  tutorialSidebar: [
-    'intro',
-    'hello',
-    {
-      type: 'category',
-      label: 'Tutorial',
-      items: ['tutorial-basics/create-a-document'],
     },
   ],
    */
