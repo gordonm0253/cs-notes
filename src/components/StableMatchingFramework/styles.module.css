@@ -1,9 +1,27 @@
 .framework {
+  --stable-highlight-foreground: #ffffff;
+  --stable-accepted-background: color-mix(
+    in srgb,
+    var(--ifm-color-primary) 12%,
+    var(--ifm-background-color)
+  );
+  --stable-latest-ring: color-mix(in srgb, var(--ifm-color-primary) 22%, transparent);
+
   margin: 2rem 0;
   border: 1px solid var(--ifm-color-emphasis-200);
   border-radius: 8px;
   background: var(--ifm-background-surface-color);
   overflow: hidden;
+}
+
+[data-theme='dark'] .framework {
+  --stable-highlight-foreground: #062d33;
+  --stable-accepted-background: color-mix(
+    in srgb,
+    var(--ifm-color-primary) 18%,
+    var(--ifm-background-color)
+  );
+  --stable-latest-ring: color-mix(in srgb, var(--ifm-color-primary) 28%, transparent);
 }
 
 .header {
@@ -114,7 +132,7 @@
 
 .matchedPerson .personHeader > span {
   background: var(--ifm-color-primary);
-  color: var(--ifm-color-primary-contrast-foreground);
+  color: var(--stable-highlight-foreground);
 }
 
 .rankingTrail {
@@ -168,12 +186,12 @@
 
 .acceptedPair {
   border-color: var(--ifm-color-primary);
-  background: color-mix(in srgb, var(--ifm-color-primary) 16%, var(--ifm-background-color));
+  background: var(--stable-accepted-background);
   color: var(--ifm-color-primary);
 }
 
 .latestPair {
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ifm-color-primary) 20%, transparent);
+  box-shadow: 0 0 0 2px var(--stable-latest-ring);
 }
 
 .rejectedPair {
@@ -214,7 +232,7 @@
 .primaryButton {
   border-color: var(--ifm-color-primary) !important;
   background: var(--ifm-color-primary) !important;
-  color: var(--ifm-color-primary-contrast-foreground) !important;
+  color: var(--stable-highlight-foreground) !important;
 }
 
 @media screen and (max-width: 996px) {
