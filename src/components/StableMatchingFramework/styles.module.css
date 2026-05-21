@@ -11,7 +11,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1.5rem;
+  padding: 1rem;
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
 }
 
@@ -31,8 +31,15 @@
   text-transform: uppercase;
 }
 
-.stepBadge {
+.headerActions {
+  display: flex;
   flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.stepBadge {
   padding: 0.45rem 0.7rem;
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 999px;
@@ -44,17 +51,15 @@
 .board {
   display: grid;
   grid-template-columns: repeat(2, minmax(220px, 1fr));
-  gap: 1rem;
-  padding: 1.5rem;
+  gap: 0.75rem;
+  padding: 1rem;
 }
 
-.boardColumn,
-.panel {
+.boardColumn {
   min-width: 0;
 }
 
-.boardColumn h3,
-.panel h3 {
+.boardColumn h3 {
   margin: 0 0 0.75rem;
   font-size: 1rem;
 }
@@ -64,10 +69,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-  min-height: 86px;
-  margin-bottom: 0.75rem;
-  padding: 0.8rem;
+  gap: 0.55rem;
+  min-height: 72px;
+  margin-bottom: 0.55rem;
+  padding: 0.62rem;
   border: 1px solid var(--ifm-color-emphasis-200);
   border-radius: 8px;
   background: var(--ifm-background-color);
@@ -84,8 +89,8 @@
 .personHeader > span {
   display: inline-grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background: var(--ifm-color-emphasis-200);
   color: var(--ifm-color-emphasis-900);
@@ -93,8 +98,13 @@
 }
 
 .person small,
-.matchCard small {
+.personHeader small {
   color: var(--ifm-color-emphasis-700);
+}
+
+.personHeader small {
+  max-width: 60%;
+  text-align: right;
 }
 
 .activePerson {
@@ -107,29 +117,35 @@
   color: var(--ifm-color-primary-contrast-foreground);
 }
 
-.proposalTrail {
+.rankingTrail {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.45rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
   width: 100%;
-  min-height: 30px;
+  min-height: 34px;
 }
 
 .trailLabel {
-  flex-basis: 100%;
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
 }
 
-.proposalChip {
+.rankingList {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.rankingChip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 34px;
-  min-height: 28px;
-  padding: 0.2rem 0.5rem;
+  min-width: 32px;
+  min-height: 26px;
+  padding: 0.18rem 0.45rem;
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 999px;
   background: var(--ifm-color-emphasis-100);
@@ -139,43 +155,49 @@
   line-height: 1;
 }
 
-.heldProposal {
+.rankingSeparator {
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.proposedPair {
+  border-style: solid;
+  border-color: var(--ifm-color-emphasis-600);
+}
+
+.acceptedPair {
   border-color: var(--ifm-color-primary);
   background: color-mix(in srgb, var(--ifm-color-primary) 16%, var(--ifm-background-color));
   color: var(--ifm-color-primary);
 }
 
-.latestProposal {
+.latestPair {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--ifm-color-primary) 20%, transparent);
 }
 
-.rejectedProposal {
+.rejectedPair {
   border-color: #d45b45;
   color: #8a1f11;
   background: #ffe6df;
   text-decoration: line-through;
 }
 
-[data-theme='dark'] .rejectedProposal {
+[data-theme='dark'] .rejectedPair {
   border-color: #a94a39;
   color: #ffb5a5;
   background: #482019;
 }
 
-.noProposal {
-  color: var(--ifm-color-emphasis-700);
-}
-
 .controls {
   display: flex;
   justify-content: center;
-  gap: 0.75rem;
-  padding: 0 1.5rem 1.5rem;
+  gap: 0.5rem;
 }
 
 .controls button {
-  min-width: 96px;
-  padding: 0.55rem 0.9rem;
+  min-width: 78px;
+  padding: 0.45rem 0.7rem;
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 8px;
   background: var(--ifm-background-color);
@@ -195,85 +217,6 @@
   color: var(--ifm-color-primary-contrast-foreground) !important;
 }
 
-.detailGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 1rem;
-  padding: 1.5rem;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
-}
-
-.panel {
-  padding: 1rem;
-  border: 1px solid var(--ifm-color-emphasis-200);
-  border-radius: 8px;
-  background: var(--ifm-background-color);
-}
-
-.preferenceGrid {
-  display: grid;
-  gap: 0.55rem;
-}
-
-.preferenceRow {
-  display: grid;
-  grid-template-columns: 32px 1fr;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.5rem;
-  border-radius: 8px;
-}
-
-.activeRow {
-  background: color-mix(in srgb, var(--ifm-color-primary) 12%, transparent);
-}
-
-.preferenceName {
-  display: inline-grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--ifm-color-emphasis-200);
-  font-weight: 800;
-}
-
-.preferenceRow ol {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.preferenceRow li {
-  padding: 0.25rem 0.45rem;
-  border-radius: 6px;
-  background: var(--ifm-color-emphasis-100);
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-.matchGrid {
-  display: grid;
-  gap: 0.65rem;
-}
-
-.matchCard {
-  display: grid;
-  grid-template-columns: 28px 42px 1fr;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem;
-  border-radius: 8px;
-  background: var(--ifm-color-emphasis-100);
-}
-
-.matchCard span {
-  font-weight: 800;
-}
-
 @media screen and (max-width: 996px) {
   .header,
   .controls {
@@ -281,8 +224,11 @@
     flex-direction: column;
   }
 
-  .board,
-  .detailGrid {
+  .headerActions {
+    align-items: stretch;
+  }
+
+  .board {
     grid-template-columns: 1fr;
   }
 }

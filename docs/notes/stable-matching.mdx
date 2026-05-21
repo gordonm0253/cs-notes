@@ -17,7 +17,8 @@ We have hospitals $h_1, \dots, h_n$ and residents $r_1, \dots, r_n$, each with a
 
 ```
 Initialize M = {}
-while there is an unmatched hospital h:
+while there is an unmatched hospital:
+    let h = the lowest-ID unmatched hospital
     let r = first resident on h's list not yet proposed to
     if r is unmatched:
         add (h, r) to M
@@ -27,3 +28,47 @@ while there is an unmatched hospital h:
 end while
 output M
 ```
+
+# Visualization Demo
+
+<StableMatchingFramework />
+
+# Runtime Analysis:
+
+We observe that no hospital $h$ makes an offer twice to any resident $r$. This follows from the description of the algorithm. There are at most $n^2$ proposals total. Each iteration of the while loop makes exactly one proposal, the algorithm terminates in $O(n^2)$ iterations.
+
+# Correctness:
+
+We prove that Gale-Shapley produces a stable perfect matching. We show each of these properties separately; try them yourself before reading the solutions!
+
+**Claim 1: The output is a perfect matching.**
+
+<details>
+<summary>Hint</summary>
+
+Suppose some hospital $h$ is unmatched at termination. How many proposals did $h$ make, and what does this imply about the residents?
+
+</details>
+
+<details>
+<summary>Solution</summary>
+
+Your solution text here.
+
+</details>
+
+**Claim 2: The output is stable.**
+
+<details>
+<summary>Hint</summary>
+
+Recall what it means for a pair $(h, r) \notin M$ to be a blocking pair. Argue by contradiction why no such pair can exist in the output of Gale-Shapley!
+
+</details>
+
+<details>
+<summary>Solution</summary>
+
+Your solution text here.
+
+</details>

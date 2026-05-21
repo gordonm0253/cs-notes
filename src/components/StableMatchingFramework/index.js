@@ -22,7 +22,7 @@ const residentPreferences = {
 const steps = [
   {
     title: 'Start with everyone unmatched',
-    text: 'Each hospital proposes down its preference list until every resident holds one proposal.',
+    text: 'Always choose the lowest-ID unmatched hospital, and have it propose down its preference list until it is matched.',
     proposals: [],
     matches: {},
     activeHospital: null,
@@ -58,7 +58,7 @@ const steps = [
   },
   {
     title: 'H2 proposes to R2',
-    text: 'R2 prefers H1 over H2, so R2 rejects H2. H2 will keep moving down the list.',
+    text: 'R2 prefers H1 over H2, so R2 rejects H2. H2 is still the lowest-ID unmatched hospital, so it keeps going.',
     proposals: [
       ['H1', 'R2'],
       ['H2', 'R1'],
@@ -70,31 +70,31 @@ const steps = [
     rejected: ['H2', 'R2'],
   },
   {
-    title: 'H4 proposes to R3',
-    text: 'R3 is unmatched, so R3 holds H4. Only H2 remains unmatched.',
-    proposals: [
-      ['H1', 'R2'],
-      ['H2', 'R1'],
-      ['H3', 'R1'],
-      ['H2', 'R2'],
-      ['H4', 'R3'],
-    ],
-    matches: {R2: 'H1', R1: 'H3', R3: 'H4'},
-    activeHospital: 'H4',
-  },
-  {
     title: 'H2 proposes to R4',
-    text: 'R4 is unmatched, so R4 holds H2. Everyone is matched and the algorithm terminates.',
+    text: 'R4 is unmatched, so R4 holds H2. H2 is matched again, so the next lowest-ID unmatched hospital is H4.',
     proposals: [
       ['H1', 'R2'],
       ['H2', 'R1'],
       ['H3', 'R1'],
       ['H2', 'R2'],
-      ['H4', 'R3'],
       ['H2', 'R4'],
     ],
-    matches: {R2: 'H1', R1: 'H3', R3: 'H4', R4: 'H2'},
+    matches: {R2: 'H1', R1: 'H3', R4: 'H2'},
     activeHospital: 'H2',
+  },
+  {
+    title: 'H4 proposes to R3',
+    text: 'R3 is unmatched, so R3 holds H4. Everyone is matched and the algorithm terminates.',
+    proposals: [
+      ['H1', 'R2'],
+      ['H2', 'R1'],
+      ['H3', 'R1'],
+      ['H2', 'R2'],
+      ['H2', 'R4'],
+      ['H4', 'R3'],
+    ],
+    matches: {R2: 'H1', R1: 'H3', R3: 'H4', R4: 'H2'},
+    activeHospital: 'H4',
   },
 ];
 
@@ -102,25 +102,21 @@ function rank(preferences, option) {
   return preferences.indexOf(option) + 1;
 }
 
-function PreferenceList({title, items, preferences, activeName}) {
+function RankingTrail({label, options, getPairKey, getPairClass}) {
   return (
-    <section className={styles.panel}>
-      <h3>{title}</h3>
-      <div className={styles.preferenceGrid}>
-        {items.map((name) => (
-          <div
-            className={clsx(styles.preferenceRow, name === activeName && styles.activeRow)}
-            key={name}>
-            <span className={styles.preferenceName}>{name}</span>
-            <ol>
-              {preferences[name].map((choice) => (
-                <li key={choice}>{choice}</li>
-              ))}
-            </ol>
-          </div>
+    <div className={styles.rankingTrail} aria-label={label}>
+      <small className={styles.trailLabel}>Ranking</small>
+      <div className={styles.rankingList}>
+        {options.map((option, index) => (
+          <React.Fragment key={getPairKey(option)}>
+            {index > 0 && <span className={styles.rankingSeparator}>&gt;</span>}
+            <span className={clsx(styles.rankingChip, getPairClass(option))}>
+              {option}
+            </span>
+          </React.Fragment>
         ))}
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -129,32 +125,48 @@ function MatchingBoard({step}) {
     () => new Set(Object.values(step.matches)),
     [step.matches],
   );
-  const proposalsByHospital = useMemo(
+  const matchesByHospital = useMemo(
     () =>
-      step.proposals.reduce((groups, [hospital, resident]) => {
-        groups[hospital] = [...(groups[hospital] ?? []), resident];
+      Object.entries(step.matches).reduce((groups, [resident, hospital]) => {
+        groups[hospital] = resident;
         return groups;
       }, {}),
-    [step.proposals],
+    [step.matches],
   );
-  const proposalsByResident = useMemo(
+  const proposalKeys = useMemo(
     () =>
-      step.proposals.reduce((groups, [hospital, resident]) => {
-        groups[resident] = [...(groups[resident] ?? []), hospital];
-        return groups;
-      }, {}),
+      new Set(step.proposals.map(([hospital, resident]) => `${hospital}-${resident}`)),
     [step.proposals],
   );
   const latestProposal = step.proposals[step.proposals.length - 1];
   const latestKey = latestProposal ? `${latestProposal[0]}-${latestProposal[1]}` : null;
-  const rejectedKey = step.rejected ? `${step.rejected[0]}-${step.rejected[1]}` : null;
+
+  const getPairClass = (hospital, resident) => {
+    const key = `${hospital}-${resident}`;
+    const wasProposed = proposalKeys.has(key);
+    const currentMatch = step.matches[resident];
+    const isHeld = currentMatch === hospital;
+    const wasRejected =
+      wasProposed &&
+      !isHeld &&
+      currentMatch &&
+      rank(residentPreferences[resident], currentMatch) <
+        rank(residentPreferences[resident], hospital);
+
+    return [
+      wasProposed && styles.proposedPair,
+      latestKey === key && styles.latestPair,
+      isHeld && styles.acceptedPair,
+      wasRejected && styles.rejectedPair,
+    ];
+  };
 
   return (
     <section className={styles.board} aria-label="Stable matching proposal board">
       <div className={styles.boardColumn}>
         <h3>Hospitals</h3>
         {hospitals.map((hospital) => {
-          const proposedTo = proposalsByHospital[hospital] ?? [];
+          const match = matchesByHospital[hospital];
           return (
             <div
               className={clsx(
@@ -165,30 +177,14 @@ function MatchingBoard({step}) {
               key={hospital}>
               <div className={styles.personHeader}>
                 <span>{hospital}</span>
-                <small>{matchedHospitals.has(hospital) ? 'matched' : 'free'}</small>
+                <small>{match ? `matched with ${match}` : 'free'}</small>
               </div>
-              <div className={styles.proposalTrail} aria-label={`${hospital} proposals`}>
-                <small className={styles.trailLabel}>Proposed to</small>
-                {proposedTo.length === 0 ? (
-                  <small className={styles.noProposal}>No proposals yet</small>
-                ) : (
-                  proposedTo.map((resident) => {
-                    const key = `${hospital}-${resident}`;
-                    return (
-                      <span
-                        className={clsx(
-                          styles.proposalChip,
-                          latestKey === key && styles.latestProposal,
-                          rejectedKey === key && styles.rejectedProposal,
-                          step.matches[resident] === hospital && styles.heldProposal,
-                        )}
-                        key={key}>
-                        {resident}
-                      </span>
-                    );
-                  })
-                )}
-              </div>
+              <RankingTrail
+                label={`${hospital} ranking`}
+                options={hospitalPreferences[hospital]}
+                getPairKey={(resident) => `${hospital}-${resident}`}
+                getPairClass={(resident) => getPairClass(hospital, resident)}
+              />
             </div>
           );
         })}
@@ -198,61 +194,20 @@ function MatchingBoard({step}) {
         <h3>Residents</h3>
         {residents.map((resident) => {
           const match = step.matches[resident];
-          const offers = proposalsByResident[resident] ?? [];
           return (
             <div
               className={clsx(styles.person, match && styles.matchedPerson)}
               key={resident}>
               <div className={styles.personHeader}>
                 <span>{resident}</span>
-                <small>{match ? `holding ${match}` : 'free'}</small>
+                <small>{match ? `matched with ${match}` : 'free'}</small>
               </div>
-              <div className={styles.proposalTrail} aria-label={`${resident} received offers`}>
-                <small className={styles.trailLabel}>Offers</small>
-                {offers.length === 0 ? (
-                  <small className={styles.noProposal}>No offers yet</small>
-                ) : (
-                  offers.map((hospital) => {
-                    const key = `${hospital}-${resident}`;
-                    return (
-                      <span
-                        className={clsx(
-                          styles.proposalChip,
-                          latestKey === key && styles.latestProposal,
-                          rejectedKey === key && styles.rejectedProposal,
-                          match === hospital && styles.heldProposal,
-                        )}
-                        key={key}>
-                        {hospital}
-                      </span>
-                    );
-                  })
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
-
-function MatchSummary({matches}) {
-  return (
-    <section className={styles.panel}>
-      <h3>Current Matching</h3>
-      <div className={styles.matchGrid}>
-        {residents.map((resident) => {
-          const hospital = matches[resident];
-          return (
-            <div className={styles.matchCard} key={resident}>
-              <span>{resident}</span>
-              <strong>{hospital ?? '-'}</strong>
-              <small>
-                {hospital
-                  ? `${resident} ranks ${hospital} #${rank(residentPreferences[resident], hospital)}`
-                  : 'unmatched'}
-              </small>
+              <RankingTrail
+                label={`${resident} ranking`}
+                options={residentPreferences[resident]}
+                getPairKey={(hospital) => `${hospital}-${resident}`}
+                getPairClass={(hospital) => getPairClass(hospital, resident)}
+              />
             </div>
           );
         })}
@@ -278,43 +233,29 @@ export default function StableMatchingFramework() {
           <h2>{step.title}</h2>
           <p>{step.text}</p>
         </div>
-        <div className={styles.stepBadge}>
-          Step {stepIndex + 1} / {steps.length}
+        <div className={styles.headerActions}>
+          <div className={styles.stepBadge}>
+            Step {stepIndex + 1} / {steps.length}
+          </div>
+          <div className={styles.controls}>
+            <button type="button" onClick={goBack} disabled={stepIndex === 0}>
+              Previous
+            </button>
+            <button type="button" onClick={reset}>
+              Reset
+            </button>
+            <button
+              className={styles.primaryButton}
+              type="button"
+              onClick={goForward}
+              disabled={stepIndex === steps.length - 1}>
+              Next
+            </button>
+          </div>
         </div>
       </div>
 
       <MatchingBoard step={step} />
-
-      <div className={styles.controls}>
-        <button type="button" onClick={goBack} disabled={stepIndex === 0}>
-          Previous
-        </button>
-        <button type="button" onClick={reset}>
-          Reset
-        </button>
-        <button
-          className={styles.primaryButton}
-          type="button"
-          onClick={goForward}
-          disabled={stepIndex === steps.length - 1}>
-          Next
-        </button>
-      </div>
-
-      <div className={styles.detailGrid}>
-        <PreferenceList
-          title="Hospital Preferences"
-          items={hospitals}
-          preferences={hospitalPreferences}
-          activeName={step.activeHospital}
-        />
-        <PreferenceList
-          title="Resident Preferences"
-          items={residents}
-          preferences={residentPreferences}
-        />
-        <MatchSummary matches={step.matches} />
-      </div>
     </div>
   );
 }
