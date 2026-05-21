@@ -6,6 +6,8 @@ import StableMatchingFramework from '@site/src/components/StableMatchingFramewor
 
 # Stable Matching
 
+## Introduction
+
 Stable matching is a framework for pairing two groups when each participant has ranked preferences over the other side. Classic examples include matching men to women or hospital to residents. We will use hospital and resident example in our notes.
 
 We have hospitals $h_1, \dots, h_n$ and residents $r_1, \dots, r_n$, each with a ranked preference list over the other side. We want to find a matching $M$ (e.g. $M = \{(h_1, r_{16}), (h_{14}, r_7),  \dots \}$) satisfying two properties:
@@ -13,12 +15,11 @@ We have hospitals $h_1, \dots, h_n$ and residents $r_1, \dots, r_n$, each with a
 - **Perfect**: All hospitals and residents appear exactly once in our final matching. Intuitively, no one is left unmatched and no one is assigned more than one partner.
 - **Stable**: There should be no unmatched pair who would both prefer each other over their assigned partners. Formally, there should be no **blocking pair**: a hospital-resident pair $(h, r) \notin M$ where $h$ prefers $r$ over its current resident $r'$ and $r$ prefers $h$ over its current hospital $h'$.
 
-# Gale-Shapley Algorithm
+## Gale-Shapley Algorithm
 
 ```
 Initialize M = {}
-while there is an unmatched hospital:
-    let h = the lowest-ID unmatched hospital
+while there is an unmatched hospital h:
     let r = first resident on h's list not yet proposed to
     if r is unmatched:
         add (h, r) to M
@@ -29,15 +30,15 @@ end while
 output M
 ```
 
-# Visualization Demo
+## Visualization Demo
 
 <StableMatchingFramework />
 
-# Runtime Analysis:
+## Runtime Analysis
 
 We observe that no hospital $h$ makes an offer twice to any resident $r$. This follows from the description of the algorithm. There are at most $n^2$ proposals total. Each iteration of the while loop makes exactly one proposal, the algorithm terminates in $O(n^2)$ iterations.
 
-# Correctness:
+## Correctness
 
 We prove that Gale-Shapley produces a stable perfect matching. We show each of these properties separately; try them yourself before reading the solutions!
 
