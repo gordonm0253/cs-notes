@@ -2,23 +2,21 @@ import React, {useMemo, useState} from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.css';
 
-const hospitals = ['H1', 'H2', 'H3', 'H4', 'H5'];
-const residents = ['R1', 'R2', 'R3', 'R4', 'R5'];
+const hospitals = ['H1', 'H2', 'H3', 'H4'];
+const residents = ['R1', 'R2', 'R3', 'R4'];
 
 const hospitalPreferences = {
-  H1: ['R1', 'R2', 'R3', 'R4', 'R5'],
-  H2: ['R1', 'R2', 'R3', 'R4', 'R5'],
-  H3: ['R1', 'R2', 'R3', 'R4', 'R5'],
-  H4: ['R2', 'R3', 'R4', 'R5', 'R1'],
-  H5: ['R3', 'R4', 'R5', 'R2', 'R1'],
+  H1: ['R1', 'R2', 'R3', 'R4'],
+  H2: ['R1', 'R2', 'R3', 'R4'],
+  H3: ['R1', 'R2', 'R3', 'R4'],
+  H4: ['R2', 'R3', 'R4', 'R1'],
 };
 
 const residentPreferences = {
-  R1: ['H3', 'H2', 'H1', 'H4', 'H5'],
-  R2: ['H4', 'H2', 'H1', 'H3', 'H5'],
-  R3: ['H5', 'H2', 'H1', 'H4', 'H3'],
-  R4: ['H2', 'H1', 'H5', 'H4', 'H3'],
-  R5: ['H1', 'H5', 'H4', 'H3', 'H2'],
+  R1: ['H3', 'H2', 'H1', 'H4'],
+  R2: ['H4', 'H2', 'H1', 'H3'],
+  R3: ['H2', 'H1', 'H4', 'H3'],
+  R4: ['H1', 'H4', 'H3', 'H2'],
 };
 
 const steps = [
@@ -134,7 +132,7 @@ const steps = [
   },
   {
     title: 'H1 proposes to R4',
-    text: 'H1 keeps going and proposes to R4, who is still unmatched.',
+    text: 'R4 is unmatched, so R4 holds H1. Every hospital is now matched and the algorithm terminates.',
     proposals: [
       ['H1', 'R1'],
       ['H2', 'R1'],
@@ -147,65 +145,6 @@ const steps = [
       ['H1', 'R4'],
     ],
     matches: {R1: 'H3', R2: 'H4', R3: 'H2', R4: 'H1'},
-    activeHospital: 'H1',
-  },
-  {
-    title: 'H5 proposes to R3',
-    text: 'R3 prefers H5 over H2, so R3 trades up one more time. H2 is displaced.',
-    proposals: [
-      ['H1', 'R1'],
-      ['H2', 'R1'],
-      ['H1', 'R2'],
-      ['H3', 'R1'],
-      ['H2', 'R2'],
-      ['H1', 'R3'],
-      ['H4', 'R2'],
-      ['H2', 'R3'],
-      ['H1', 'R4'],
-      ['H5', 'R3'],
-    ],
-    matches: {R1: 'H3', R2: 'H4', R3: 'H5', R4: 'H1'},
-    activeHospital: 'H5',
-    rejected: ['H2', 'R3'],
-  },
-  {
-    title: 'H2 proposes to R4',
-    text: 'R4 prefers H2 over H1, so R4 trades up. H1 is displaced for the final time.',
-    proposals: [
-      ['H1', 'R1'],
-      ['H2', 'R1'],
-      ['H1', 'R2'],
-      ['H3', 'R1'],
-      ['H2', 'R2'],
-      ['H1', 'R3'],
-      ['H4', 'R2'],
-      ['H2', 'R3'],
-      ['H1', 'R4'],
-      ['H5', 'R3'],
-      ['H2', 'R4'],
-    ],
-    matches: {R1: 'H3', R2: 'H4', R3: 'H5', R4: 'H2'},
-    activeHospital: 'H2',
-    rejected: ['H1', 'R4'],
-  },
-  {
-    title: 'H1 proposes to R5',
-    text: 'R5 is unmatched, so R5 holds H1. Every hospital is now matched and the algorithm terminates.',
-    proposals: [
-      ['H1', 'R1'],
-      ['H2', 'R1'],
-      ['H1', 'R2'],
-      ['H3', 'R1'],
-      ['H2', 'R2'],
-      ['H1', 'R3'],
-      ['H4', 'R2'],
-      ['H2', 'R3'],
-      ['H1', 'R4'],
-      ['H5', 'R3'],
-      ['H2', 'R4'],
-      ['H1', 'R5'],
-    ],
-    matches: {R1: 'H3', R2: 'H4', R3: 'H5', R4: 'H2', R5: 'H1'},
     activeHospital: 'H1',
   },
 ];
