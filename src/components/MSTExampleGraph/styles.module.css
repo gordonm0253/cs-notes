@@ -1,0 +1,48 @@
+.figure {
+  margin: 1.5rem 0;
+}
+
+.graph {
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+}
+
+.edge {
+  stroke: var(--ifm-color-emphasis-500);
+  stroke-linecap: round;
+  stroke-width: 5;
+}
+
+.weightHalo {
+  fill: var(--ifm-background-surface-color);
+  stroke: var(--ifm-color-emphasis-300);
+  stroke-width: 2;
+}
+
+.weight,
+.nodeLabel {
+  fill: var(--ifm-font-color-base);
+  font-weight: 800;
+  text-anchor: middle;
+  dominant-baseline: central;
+  user-select: none;
+}
+
+.weight {
+  font-size: 22px;
+}
+
+.node {
+  fill: var(--ifm-background-color);
+  stroke: var(--ifm-color-primary);
+  stroke-width: 5;
+}
+
+.nodeLabel {
+  font-size: 30px;
+}

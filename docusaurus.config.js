@@ -14,7 +14,7 @@ import rehypeKatex from 'rehype-katex';
 const config = {
   title: 'CS Notes',
   tagline: 'Computer science notes for algorithms, theory, systems, and more.',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/algo.png',
 
   // Set the production url of your site here
   url: 'https://gordonm0253.github.io',
@@ -58,15 +58,17 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/algo.png',
       colorMode: {
-        respectPrefersColorScheme: true,
+        defaultMode: 'dark',
+        disableSwitch: true,
+        respectPrefersColorScheme: false,
       },
       navbar: {
         title: 'CS Notes',
         logo: {
           alt: 'CS Notes Logo',
-          src: 'img/logo.svg',
+          src: 'img/algo.png',
         },
         items: [
           {
