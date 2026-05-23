@@ -3,6 +3,7 @@ sidebar_position: 2
 ---
 
 import MSTVisualization from '@site/src/components/MSTVisualization';
+import MSTExampleGraph from '@site/src/components/MSTExampleGraph';
 
 # Greedy Algorithms
 
@@ -16,17 +17,30 @@ import MSTVisualization from '@site/src/components/MSTVisualization';
 
 ## Minimum Spanning Tree
 
-### Kruskal's Algorithm
+Suppose we have an connected, undirected graph $G = (V, E)$, where edge $e \in E$ has some positive edge weight $c_e$. We want to find the a subset of the edges $T \subseteq E$ such that the graph $(V, T)$ is still connected and the sum of edge costs $\sum_{e \in T} c_e$ is minimized. We call $T$ the minimum spanning tree of our graph $G$. 
 
-### Prim's Algorithm
+For example, suppose we have a graph:
 
-### Visualization Demo
+<MSTExampleGraph />
 
-<MSTVisualization />
+Can you identify the minimum spanning tree?
 
-## Practice
+<details>
+<summary>Solution</summary>
 
-**Problem 1.** Suppose we have a undirected graph $G = (V, E)$ with edge weights $c_e \ge 0$ for each edge $e \in E$, and a minimum spanning tree $T$ in this graph. Suppose we squared the cost of each edge $e \in E$, i.e. let $c'_e = c_e^2$. Is $T$ still a MST with these new edge weights? If yes, provide a brief explanation; if no, provide a counterexample.
+One spanning tree is $\{AB, BC, BD\}$, which connects all four vertices with total cost $1 + 2 + 4 = 7$. Another spanning tree is $\{AC, BC, CD\}$, which also connects all four vertices, but has total cost $3 + 2 + 5 = 10$.
+
+The minimum spanning tree is
+
+$$
+T = \{AB, BC, BD\}
+$$
+
+with total cost $7$. We do not include $AC$, because $A$ and $C$ are already connected through $ABC$ at lower cost, and we do not include $CD$, because $D$ is already connected through $BD$ at lower cost.
+
+</details>
+
+We prove that a minimum spanning tree $T$ has no cycles.
 
 <details>
 <summary>Solution</summary>
@@ -35,7 +49,23 @@ Solution coming soon!
 
 </details>
 
-Followup: Suppose we removed the condition that $c_e \ge 0$, but still squared the weights. Is $T$ still a MST?
+In the following section, we study Kruskal's and Prim's algorithm to find a graph's minimum spanning tree (MST).
+
+### Kruskal's Algorithm
+
+
+
+### Prim's Algorithm
+
+
+
+### Visualization Demo
+
+<MSTVisualization />
+
+## Practice
+
+**Problem 1.** Suppose we have a undirected graph $G = (V, E)$ with edge weights $c_e > 0$ for each edge $e \in E$, and a minimum spanning tree $T$ in this graph. Suppose we squared the cost of each edge $e \in E$, i.e. let $c'_e = c_e^2$. Is $T$ still a MST with these new edge weights? If yes, provide a brief explanation; if no, provide a counterexample.
 
 <details>
 <summary>Solution</summary>
