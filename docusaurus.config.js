@@ -12,8 +12,8 @@ import rehypeKatex from 'rehype-katex';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'CS4820 Algorithms Notes',
-  tagline: 'Course notes for stable matching, greedy algorithms, dynamic programming, divide and conquer, and NP-completeness.',
+  title: 'CS Notes',
+  tagline: 'Computer science notes for algorithms, theory, systems, and more.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -63,9 +63,9 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: 'CS4820 Notes',
+        title: 'CS Notes',
         logo: {
-          alt: 'CS4820 Algorithms Notes Logo',
+          alt: 'CS Notes Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -73,7 +73,12 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
-            label: 'Notes',
+            label: 'CS4820 Notes',
+          },
+          {
+            to: '/coming-soon',
+            position: 'left',
+            label: 'Coming Soon',
           },
         ],
       },
@@ -116,7 +121,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} CS4820 Algorithms Notes. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} CS Notes. Built with Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,

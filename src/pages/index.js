@@ -33,7 +33,7 @@ export default function Home() {
   return (
     <Layout
       title={siteConfig.title}
-      description="CS4820 algorithms notes covering stable matching, greedy algorithms, dynamic programming, divide and conquer, and NP-completeness.">
+      description="Computer science notes covering algorithms, theory, systems, and more.">
       <HomepageHeader />
       <main>
         <HomepageFeatures />
