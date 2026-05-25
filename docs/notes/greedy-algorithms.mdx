@@ -9,11 +9,23 @@ import MSTExampleGraph from '@site/src/components/MSTExampleGraph';
 
 ## Introduction
 
+Greedy algorithms build up a solution piece-by-piece, taking locally optimal choices at each step (without reconsidering past choices). For certain problems, locally optimal choices result in a globally optimal solution; in others, they produce a near-optimal one (see [approximation algorithms](./approximation-algorithms.mdx)). In this section, we explore greedy algorithms that produce an optimal solution, as well as two styles of correctness proofs for greedy algorithms: an exchange argument or a greedy stays ahead argument.
+
 ## Greedy Stays Ahead
 
 ## Interval Scheduling
 
 ## Exchange Argument
+
+Suppose that our greedy algorithm produces a solution $A$. Our goal is to prove that anything in our solution $A$ can be swapped with anything in the optimal solution $O$ without losing optimality.
+
+1. Assume that your greedy solution and the optimal solution you choose differ in some way. (If this is not the case, then $O = A$ and we are done!)
+2. Show that it is possible to make progress, that is “exchange” elements in $O$ to make it more similar to your solution $A$ while preserving the optimality of $O$.
+3. Show that this exchange progress terminates, and when it does $O = A$ where $O$ is optimal. Conclude $A$ is optimal.
+
+:::note
+Make sure you exchange elements from $O$, not $A$! If you do this, then you change the solution that you trying to prove is optimal!
+:::
 
 ## Minimum Spanning Tree
 

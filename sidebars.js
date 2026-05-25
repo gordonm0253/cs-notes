@@ -23,7 +23,8 @@ const sidebars = {
     'notes/dynamic-programming',
     'notes/divide-and-conquer',
     'notes/network-flow',
-    'notes/np-completeness'
+    'notes/np-completeness',
+    'notes/approximation-algorithms'
   ],
   // But you can create a sidebar manually
   /*
