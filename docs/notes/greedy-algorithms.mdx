@@ -13,9 +13,10 @@ Greedy algorithms build up a solution piece-by-piece, taking locally optimal cho
 
 ## Greedy Stays Ahead
 
-## Interval Scheduling
 
 ## Exchange Argument
+
+
 
 Suppose that our greedy algorithm produces a solution $A$. Our goal is to prove that anything in our solution $A$ can be swapped with anything in the optimal solution $O$ without losing optimality.
 
@@ -26,6 +27,66 @@ Suppose that our greedy algorithm produces a solution $A$. Our goal is to prove 
 :::note
 Make sure you exchange elements from $O$, not $A$! If you do this, then you change the solution that you trying to prove is optimal!
 :::
+
+## Sample Problem: Interval Scheduling
+
+Suppose we have a machine $M$ that can process at most $1$ job at a time. We have $n$ job requests, each with a start time $s_i$ and end time $f_i$ for $1 \le i \le n$ with $s_i < f_i$. Our objective is to schedule the maximum number of non-conflicting jobs. Formally, we want to maximize the size of the set of non-conflicting jobs $S \subseteq [n]$ that we want to schedule on $M$. We say two jobs $i$ and $j$ are non-conflicting if:
+
+- job $i$ happens before job $j$: $s_i \le f_i \le s_j \le f_j$ 
+- job $j$ happens before job $i$: $s_j \le f_j \le s_i \le f_i$
+
+Give an efficient algorithm that solves this problem.
+
+### Solution
+
+To solve this problem, you'll want to pick the jobs with the earliest remaining finish times. This way
+
+```
+R = set of all jobs, A = []
+while R is not empty:
+    pick job i in R with the earliest remaining finish time and add it to A
+    remove all jobs in R that conflict with i
+output A
+```
+
+Before we prove this solution, it is a good exercise is to try and disprove bad greedy strategies. Can you find a counterexample for the following greedy approaches? For each approach, you can assume that after a job is selected, you remove all jobs that conflict with it.
+
+- Select the remaining job with the earliest start time.
+
+<details>
+<summary>Solution</summary>
+
+Solution coming soon!
+
+</details>
+
+- Select the remaining job with the shortest interval (the one that minimizes $f_i - s_i$).
+
+<details>
+<summary>Solution</summary>
+
+Solution coming soon!
+
+</details>
+
+- Select the remaining job with the latest finish time.
+
+<details>
+<summary>Solution</summary>
+
+Solution coming soon!
+
+</details>
+
+We can prove that our strategy of picking the earliest remaining finish time is optimal strategy. We show this using both greedy-stays-ahead and exchange argument proofs. For a problem set or exam, you'll only need to select one proof style, so be sure to pick the proof style that is the most straightforward!
+
+### Proof: Exchange Argument
+
+Proof coming soon!
+
+### Proof: Greedy Stays Ahead
+
+Proof coming soon!
 
 ## Minimum Spanning Tree
 
@@ -65,11 +126,15 @@ In the following section, we study Kruskal's and Prim's algorithm to find a grap
 
 ### Kruskal's Algorithm
 
-
+```
+Algorithm coming soon!
+```
 
 ### Prim's Algorithm
 
-
+```
+Algorithm coming soon!
+```
 
 ### Visualization Demo
 
