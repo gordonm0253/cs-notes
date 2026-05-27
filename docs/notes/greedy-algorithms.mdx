@@ -134,15 +134,35 @@ In the following section, we study Kruskal's and Prim's algorithm to find a grap
 
 ### Kruskal's Algorithm
 
+Kruskal's algorithm builds our spanning tree by greedily selecting the lowest cost edge that does not form a cycle. Suppose that our graph $G = (V, E)$ has $n$ vertices and $m$ edges.
+
 ```
-Algorithm coming soon!
+sort all edges based on weight
+S = {}, T = {}
+while S != V:
+    consider edge e = (u, v) with lowest edge weight
+    if adding e to T does not create a cycle:
+        add u, v to S
+        add edge e to T
+output T
 ```
+
+To implement this into code, we can use a [union find](https://en.wikipedia.org/wiki/Disjoint-set_data_structure) data structure; we can easily see if adding an edge will form a cycle by checking if its two endpoints belong to the same connected component. This lets us to process each edge in near $O(1)$ time. However, our main bottleneck of our algorithm is the $O(m \log m)$ time to sort all edges. Since $m \le n^2$, then this turns into $O(m \log n)$ overall time complexity.
 
 ### Prim's Algorithm
 
+Another strategy for building a MST is to grow it from a root node. Known as Prim's algorithm, we grow the tree outward, greedily selecting the node that can be attached using the least cost edge. Calling our root or starting node $s$, here is the pseudocode for Prim's algorithm:
 ```
-Algorithm coming soon!
+S = {s}, T = {}
+while S != V:
+    find v not in S such that edge e = (u, v) has minimum weight 
+        among all edges with one endpoint in S and other in S \ V
+    add v to S
+    add e to T
+output T
 ```
+
+We can implement Prim's algorithm using a min priority queue. We can extract each vertex exactly once from the priority queue, for a time complexity of $O(n \log n)$. Additionally, after selecting a node, we need to update the edge costs of all its neighbors (in case there is now a cheaper path to an undiscovered node). We observe that the total number of checks done is bounded by $ \sum_{u \in V} \deg(u) = 2m $. So, the total number of potential updates is $O(m)$, each costing $O(\log n)$, giving $O(m \log n)$ time complexity for the update step. Since $n \le m$, the overall time complexity is $O(m \log n)$.
 
 ### Visualization Demo
 
