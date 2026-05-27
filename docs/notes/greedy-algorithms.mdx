@@ -13,19 +13,27 @@ Greedy algorithms build up a solution piece-by-piece, taking locally optimal cho
 
 ## Greedy Stays Ahead
 
+A greedy stays ahead argument shows that your greedy solution maintains some property that is "more extreme" than any other optimal solution at every step, and that this implies optimality. The general structure is:
+
+1. Find a property of your greedy solution that is "more extreme" (e.g., smaller or larger) than any other solution after each step (this usually relates to your greedy criterion).
+2. Make sure that extremity of this characteristic implies optimality.
+3. Prove via induction that the greedy solution actually maintains this property at every step.
+4. Conclude that your solution is as good as optimal.
+
+:::note
+It is very important that you explain why your property implies optimality! A common mistake is to identify a property that greedy maintains without connecting it to the size or quality of the final solution. The property alone means nothing; you need to argue that if greedy stays ahead in this metric, it must produce a solution at least as good as any optimal solution.
+:::
 
 ## Exchange Argument
 
+Suppose that our greedy algorithm produces a solution $A$. Our goal with using an exchange argument is to prove that anything in an optimal solution $O$ can be swapped with anything in our solution $A$ without losing optimality.
 
-
-Suppose that our greedy algorithm produces a solution $A$. Our goal is to prove that anything in our solution $A$ can be swapped with anything in the optimal solution $O$ without losing optimality.
-
-1. Assume that your greedy solution and the optimal solution you choose differ in some way. (If this is not the case, then $O = A$ and we are done!)
+1. Assume that your greedy solution and the optimal solution you choose differ in some way. (If this is not the case, then $A = O$ and we are done!).
 2. Show that it is possible to make progress, that is “exchange” elements in $O$ to make it more similar to your solution $A$ while preserving the optimality of $O$.
-3. Show that this exchange progress terminates, and when it does $O = A$ where $O$ is optimal. Conclude $A$ is optimal.
+3. Show that this exchange progress terminates, and when it does $A = O$ where $O$ is optimal. Then, $A$ is at least as good as $O$, so $A$ is optimal.
 
 :::note
-Make sure you exchange elements from $O$, not $A$! If you do this, then you change the solution that you trying to prove is optimal!
+Make sure you exchange elements from $O$, not $A$! If you exchange elements from $A$, then you change the solution that you trying to prove is optimal!
 :::
 
 ## Sample Problem: Interval Scheduling
@@ -39,7 +47,7 @@ Give an efficient algorithm that solves this problem.
 
 ### Solution
 
-To solve this problem, you'll want to pick the jobs with the earliest remaining finish times. This way
+To solve this problem, we want to pick the jobs with the earliest remaining finish times. This way, we leave the most remaining time for future jobs, maximizing our future options.
 
 ```
 R = set of all jobs, A = []
