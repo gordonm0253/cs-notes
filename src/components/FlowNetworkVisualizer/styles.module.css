@@ -1,0 +1,363 @@
+.visualizer {
+  --flow-blue: #002fa7;
+  --flow-green: #14885f;
+  --flow-orange: #ff4f00;
+  --flow-red: #d72638;
+  --flow-ink-on-accent: #ffffff;
+  --flow-muted-line: var(--ifm-color-emphasis-300);
+
+  margin: 2rem 0;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+  overflow: hidden;
+}
+
+[data-theme='dark'] .visualizer {
+  --flow-blue: #7da2ff;
+  --flow-green: #58c694;
+  --flow-orange: #ff9b72;
+  --flow-red: #ff7783;
+  --flow-ink-on-accent: #071221;
+  --flow-muted-line: var(--ifm-color-emphasis-400);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.header h2 {
+  margin: 0 0 0.5rem;
+}
+
+.header p {
+  max-width: 760px;
+  margin: 0;
+}
+
+.eyebrow {
+  color: var(--flow-blue);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.totalFlow {
+  display: grid;
+  flex: 0 0 118px;
+  place-items: center;
+  min-height: 94px;
+  border-left: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.totalFlow span {
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.totalFlow strong {
+  color: var(--flow-blue);
+  font-size: 3rem;
+  line-height: 0.95;
+}
+
+.stepRail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+  gap: 1px;
+  padding: 1px;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  background: var(--ifm-color-emphasis-200);
+}
+
+.stepRail button {
+  min-width: 0;
+  min-height: 34px;
+  border: 0;
+  background: var(--ifm-background-color);
+  color: var(--ifm-color-emphasis-800);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.stepRail button:hover,
+.stepDotActive {
+  background: var(--flow-blue) !important;
+  color: var(--flow-ink-on-accent) !important;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  padding: 0 0 1rem;
+}
+
+.graph {
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  min-height: 300px;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--ifm-color-emphasis-100) 64%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      color-mix(in srgb, var(--ifm-color-emphasis-100) 64%, transparent) 1px,
+      transparent 1px
+    ),
+    var(--ifm-background-color);
+  background-size: 40px 40px;
+}
+
+.edge {
+  fill: none;
+  stroke: var(--flow-muted-line);
+  stroke-linecap: round;
+  stroke-width: 3;
+}
+
+.flowingEdge {
+  stroke: var(--flow-green);
+}
+
+.activeEdge {
+  stroke: var(--flow-orange);
+}
+
+.mutedEdge {
+  stroke: var(--ifm-color-emphasis-400);
+  opacity: 0.32;
+}
+
+.residualEdge {
+  fill: none;
+  stroke: var(--flow-blue);
+  stroke-dasharray: 8 5;
+  stroke-linecap: round;
+  stroke-width: 3;
+}
+
+.activeResidualEdge {
+  stroke: var(--flow-orange);
+}
+
+.edgeArrow,
+.flowArrow,
+.activeArrow,
+.residualArrow {
+  paint-order: stroke fill;
+  pointer-events: none;
+  stroke: var(--ifm-background-surface-color);
+  stroke-linejoin: round;
+  stroke-width: 4;
+}
+
+.edgeArrow {
+  fill: var(--flow-muted-line);
+}
+
+.flowArrow {
+  fill: var(--flow-green);
+}
+
+.activeArrow {
+  fill: var(--flow-orange);
+}
+
+.residualArrow {
+  fill: var(--flow-blue);
+}
+
+.mutedArrow {
+  fill: var(--ifm-color-emphasis-400);
+  opacity: 0.36;
+}
+
+.arrowLayer {
+  filter: drop-shadow(0 0 2px var(--ifm-background-color));
+}
+
+.edgeLabel {
+  fill: var(--ifm-background-surface-color);
+  stroke: var(--ifm-color-emphasis-300);
+  stroke-width: 1;
+}
+
+.activeLabel {
+  stroke: var(--flow-orange);
+  stroke-width: 2;
+}
+
+.mutedLabel {
+  opacity: 0.46;
+}
+
+.edgeText,
+.nodeLabel,
+.residualBadgeText {
+  fill: var(--ifm-font-color-base);
+  font-weight: 800;
+  text-anchor: middle;
+  user-select: none;
+}
+
+.edgeText {
+  font-size: 13px;
+}
+
+.mutedText {
+  opacity: 0.5;
+}
+
+.node {
+  fill: var(--ifm-background-surface-color);
+  stroke: var(--ifm-color-emphasis-500);
+  stroke-width: 3;
+}
+
+.activeNode {
+  fill: var(--flow-blue);
+  stroke: var(--flow-blue);
+}
+
+.activeNode + .nodeLabel {
+  fill: var(--flow-ink-on-accent);
+}
+
+.nodeLabel {
+  alignment-baseline: middle;
+  dominant-baseline: middle;
+  font-size: 17px;
+}
+
+.residualBadge {
+  fill: var(--ifm-background-color);
+  stroke: var(--flow-blue);
+  stroke-width: 1.5;
+}
+
+.activeResidualBadge {
+  stroke: var(--flow-orange);
+}
+
+.residualBadgeText {
+  fill: var(--flow-blue);
+  font-size: 11px;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 1rem 1rem;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  color: var(--ifm-color-emphasis-800);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.legend i {
+  display: inline-block;
+  width: 24px;
+  height: 4px;
+  border-radius: 999px;
+}
+
+.legendFlow {
+  background: var(--flow-green);
+}
+
+.legendActive {
+  background: var(--flow-orange);
+}
+
+.legendResidual {
+  background: var(--flow-blue);
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.controls button {
+  min-width: 78px;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  background: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.primaryButton {
+  border-color: var(--flow-blue) !important;
+  background: var(--flow-blue) !important;
+  color: var(--flow-ink-on-accent) !important;
+}
+
+@media screen and (max-width: 996px) {
+  .header,
+  .footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .totalFlow {
+    min-height: 70px;
+    border-top: 1px solid var(--ifm-color-emphasis-300);
+    border-left: 0;
+  }
+
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .graph {
+    min-height: 320px;
+  }
+
+}
+
+@media screen and (max-width: 560px) {
+  .mainGrid {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .controls {
+    flex-direction: column;
+  }
+}
