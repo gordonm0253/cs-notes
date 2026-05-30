@@ -4,4 +4,48 @@ sidebar_position: 6
 
 # NP-Completeness
 
-Coming soon!
+## Introduction
+
+## General Framework
+
+## Known NP-Complete Problems
+
+## Example Problem: Graph-Selection
+
+Suppose we have a graph $G = (V, E)$. You are given two disjoint sets $E_{good}$ and $E_{bad}$, and a vertex set $C \subseteq V$. The Graph-Selection problem is to determine whether there exists a vertex set $P$ such that:
+
+- $C \subseteq P$
+- For all $v \in P$, there is a $u \in P$ such that $(u, v) \in E_{good}$ 
+- For all $(u, v) \in E_{bad}$, either $u \notin P$ or $v \notin P$
+
+Prove that Graph-Selection is NP-Complete. (Source: CS 4820 FA25 Prelim 2 Review)
+
+<details>
+<summary>Hint 1</summary>
+
+Could we try a reduction from 3-SAT?
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+With our reduction from 3-SAT, create two nodes for setting a variable $x_i$ either true or false.
+
+</details>
+
+<details>
+<summary>Hint 3</summary>
+
+With the previous setup, what should our bad edge set $E_{bad}$ be?
+
+</details>
+
+<details>
+<summary>Solution</summary>
+
+Solution coming soon!
+
+</details>
+
+## Practice
