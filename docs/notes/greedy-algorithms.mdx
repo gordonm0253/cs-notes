@@ -88,11 +88,11 @@ Solution coming soon!
 
 We can prove that our strategy of picking the earliest remaining finish time is optimal strategy. We show this using both greedy-stays-ahead and exchange argument proofs. For a problem set or exam, you'll only need to select one proof style, so be sure to pick the proof style that is the most straightforward!
 
-### Proof: Exchange Argument
+### Proof: Greedy Stays Ahead
 
 Proof coming soon!
 
-### Proof: Greedy Stays Ahead
+### Proof: Exchange Argument
 
 Proof coming soon!
 
@@ -175,15 +175,42 @@ We can implement Prim's algorithm using a min priority queue. We can extract eac
 <details>
 <summary>Solution</summary>
 
-Solution coming soon!
+True. Recall that the MST produced Kruskal's algorithm depends only on the sorted order of the edge weights. Squaring the weights does not change their relative ordering (since all the weights are positive).
 
 </details>
 
-**Problem 2.**
+**Problem 2.** [Task Scheduling] Suppose you have $n$ tasks to complete. Task $i$ takes $p_i > 0$ time to complete and has priority $q_i > 0$, representing how costly it is to wait and not do the task. If task $i$ is completed at time $T_i$, then the total cost is $\sum_{i = 1}^n q_i T_i$. Your goal is to decide what order to do the tasks in order to minimize this total.
+
+Consider the following two greedy strategies:
+
+- **Most important task:** do tasks in decreasing order of $q_i$.
+- **Best value-per-minute:** do tasks in decreasing order of the ratio $q_i / p_i$.
+
+Assume all task times, priority values, and ratios are distinct. For both strategies, prove that it gives the optimal schedule or provide a counterexample.
 
 <details>
 <summary>Solution</summary>
 
-Solution coming soon!
+**Most important task**. This is not optimal. Consider a scenario with two tasks.
+
+- Task 1: $p_1 = 100$, $q_1 = 2$
+- Task 2: $p_2 = 1$, $q_2 = 1$
+
+Using the greedy strategy, we first do task 1. This gives us a total cost of $100 \cdot 2 + 101 \cdot 1 = 301$. However, if we were to do task 2 first, we would end up with a lower cost of $1 \cdot 1 + 101 \cdot 2 = 203$. Thus, doing the most important tasks first is not an optimal strategy.
+
+**Best value-per-minute**. This is optimal. We prove this via an exchange argument. Let the solution produced by our greedy algorithm be $A$, and the optimal ordering be $O$. If $A = O$, then we are done. Thus, we consider the case where $A \ne O$. If $A \ne O$, then the optimal ordering differs from the ordering specified by the greedy strategy. This means that there exists two tasks $i$ and $i + 1$ in our optimal ordering that do not respect the best value-per-minute ordering, i.e.
+
+$$
+\begin{align*}
+\frac{q_i}{p_i} < \frac{q_{i+1}}{p_{i+1}}
+\end{align*}
+$$
+
+Consider swapping the order in which the two tasks are completed. We observe that all the other finish times $T_j$ are the same (so the costs contributed by these other tasks stays the same). However, $F_i$ and $F_{i + 1}$ change.
+
+- We complete task $i$ after task $i + 1$, so $F_{i}$ increases by $p_{i + 1}$. The overall cost contributed by task $i$ increases by $q_i \cdot p_{i + 1}$.
+- We now complete task $i + 1$ first, so $F_{i + 1}$ decreases by $p_{i}$, reducing the cost by $q_{i + 1} \cdot p_{i}$.
+
+Since we assumed $\frac{q_i}{p_i} < \frac{q_{i+1}}{p_{i+1}}$, we have $q_i \cdot p_{i + 1} < q_{i + 1} \cdot p_{i}$. Since the decrease is larger than the increase in total cost, swapping the order in which we complete task $i$ and $i + 1$ improves our total cost. This contradicts the assumption that we started with an optimal schedule. We can repeat this argument for any pair of tasks that doesn't use the best value-per-minute ordering. Therefore, the optimal ordering is by decreasing ratio $q_i / p_i$.
 
 </details>
