@@ -5,45 +5,30 @@ import styles from './styles.module.css';
 const FeatureList = [
   {
     title: 'Stable Matching',
-    description: (
-      <>
-        
-      </>
-    ),
+    description: <>Gale-Shapley algorithm, proofs of stability and optimality. </>,
   },
   {
     title: 'Greedy Algorithms',
-    description: (
-      <>
-        
-      </>
-    ),
+    description: <>Interval scheduling, minimum spanning tree (Kruskal's, Prim's). Exchange arguments and greedy-stays-ahead proofs.</>,
   },
   {
     title: 'Dynamic Programming',
-    description: (
-      <>
-        
-      </>
-    ),
+    description: <>Top-down, bottom-up styles. Bellman Ford, Segmented Least Squares</>,
   },
   {
     title: 'Divide and Conquer',
-    description: (
-      <>
-        
-      </>
-    ),
+    description: <>Fast Fourier Transform, randomized median finding. Recurrences and the Master Theorem.</>,
+  },
+  {
+    title: 'Network Flow',
+    description: <>Ford-Fulkerson, max-flow min-cut theorem, bipartite matching, and reductions.</>,
   },
   {
     title: 'NP-Completeness',
-    description: (
-      <>
-        
-      </>
-    ),
+    description: <>P vs. NP, polynomial-time reductions, NP-hard and NP-complete problems.</>,
   },
 ];
+
 
 function Feature({title, description}) {
   return (
