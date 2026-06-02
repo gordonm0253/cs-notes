@@ -64,7 +64,13 @@ Before we prove this solution, it is a good exercise is to try and disprove bad 
 <details>
 <summary>Solution</summary>
 
-Solution coming soon!
+Suppose we had 3 jobs.
+
+- Job 1: $s_1 = 1$, $f_1 = 10$
+- Job 2: $s_2 = 2$, $f_2 = 3$
+- Job 3: $s_3 = 4$, $f_3 = 5$
+
+With our earliest start time strategy, we take job 1, which conflicts with both other remaining jobs. The optimal solution involves taking jobs 2 and 3 (which don't overlap). Therefore, this straetgy is not optimal.
 
 </details>
 
@@ -123,12 +129,7 @@ with total cost $7$. We do not include $AC$, because $A$ and $C$ are already con
 
 We prove that a minimum spanning tree $T$ has no cycles.
 
-<details>
-<summary>Solution</summary>
-
-Solution coming soon!
-
-</details>
+Suppose for contradiction's sake that our minimum spanning tree $T$ has a cycle. Deleting any edge $e$ from the cycle will make the MST cheaper (since all weights are positive). Furthermore, the graph remains connected after deleting an edge (the two endpoints of $e$ are still connected by the rest of the cycle). This contradicts the minimality of our claimed MST because we have a spanning tree with a lower cost; therefore, a MST cannot contain a cycle.
 
 In the following section, we study Kruskal's and Prim's algorithm to find a graph's minimum spanning tree (MST).
 

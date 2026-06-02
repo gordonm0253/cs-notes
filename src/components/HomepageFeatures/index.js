@@ -27,6 +27,10 @@ const FeatureList = [
     title: 'NP-Completeness',
     description: <>P vs. NP, polynomial-time reductions, NP-hard and NP-complete problems.</>,
   },
+  {
+    title: 'Computability',
+    description: <>Turing Machines, Recognizability, Decidability, Halting Problem</>,
+  }
 ];
 
 
