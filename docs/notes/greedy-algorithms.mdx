@@ -11,7 +11,9 @@ import MSTExampleGraph from '@site/src/components/MSTExampleGraph';
 
 Greedy algorithms build up a solution piece-by-piece, taking locally optimal choices at each step (without reconsidering past choices). For certain problems, locally optimal choices result in a globally optimal solution; in others, they produce a near-optimal one (see [approximation algorithms](./approximation-algorithms.mdx)). In this section, we explore greedy algorithms that produce an optimal solution, as well as two styles of correctness proofs for greedy algorithms: an exchange argument or a greedy stays ahead argument.
 
-## Greedy Stays Ahead
+## Proof Strategies
+
+### Greedy Stays Ahead
 
 A greedy stays ahead argument shows that your greedy solution maintains some property that is "more extreme" than any other optimal solution at every step, and that this implies optimality. The general structure is:
 
@@ -24,7 +26,7 @@ A greedy stays ahead argument shows that your greedy solution maintains some pro
 It is very important that you explain why your property implies optimality! A common mistake is to identify a property that greedy maintains without connecting it to the size or quality of the final solution. The property alone means nothing; you need to argue that if greedy stays ahead in this metric, it must produce a solution at least as good as any optimal solution.
 :::
 
-## Exchange Argument
+### Exchange Argument
 
 Suppose that our greedy algorithm produces a solution $A$. Our goal with using an exchange argument is to prove that anything in an optimal solution $O$ can be swapped with anything in our solution $A$ without losing optimality.
 
@@ -79,7 +81,13 @@ With our earliest start time strategy, we take job 1, which conflicts with both 
 <details>
 <summary>Solution</summary>
 
-Solution coming soon!
+Consider the following set of 3 jobs.
+
+- Job 1: $s_1 = 1$, $f_1 = 5$
+- Job 2: $s_2 = 4$, $f_2 = 7$
+- Job 3: $s_3 = 6$, $f_3 = 10$
+
+Taking the shortest job (2) locks us out of taking either job 1 or job 3. However, since job 1 and 3 don't overlap, taking both of them would be the optimal solution. Thus, selecting the remaininng job with the shortest interval is not the optimal solution.
 
 </details>
 
@@ -88,7 +96,13 @@ Solution coming soon!
 <details>
 <summary>Solution</summary>
 
-Solution coming soon!
+Consider the following 3 jobs.
+
+- Job 1: $s_1 = 1$, $f_1 = 5$
+- Job 2: $s_2 = 6$, $f_2 = 7$
+- Job 3: $s_3 = 1$, $f_3 = 11$
+
+With our greedy strategy, we would schedule job 3, and this would be the only job we would do. However, the optimal solution is to do jobs 1 and 2 (so this proposed greedy strategy is not optimal).
 
 </details>
 
