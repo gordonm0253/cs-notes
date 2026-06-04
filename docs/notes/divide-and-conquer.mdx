@@ -18,4 +18,48 @@ sidebar_position: 4
 
 ## Practice
 
+**Problem 1.** Consider a list of numbers $x_1, \dots, x_n$. We say that two numbers $x_i$ and $x_j$ from this list form an inversion if $i < j$ but $x_i > x_j$. For example, a list of numbers sorted in ascending order would have $0$ inversions, while a list of numbers sorted in descending order would have $0 + 1 + \dots + (n - 1) = n(n - 1)/2$ inversions (each pair of numbers form an inversion). Design a divide and conquer algorithm that runs in time $O(n \log n)$ that counts the number of inversions of a list of $n$ numbers. You may assume $n$ is a power of 2.
+
+<details>
+<summary>Hint 1</summary>
+
+Let the goal of our divide and conquer be to find the number of inversions in a list of numbers $x_1, \dots, x_k$. What are our subproblems here (hint: split the list in half)?
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+If we split our list into subproblems $x_1, \dots, x_{k/2}$ and $x_{k/2 + 1}, \dots, x_n$, note that any inversion pair $(i, j)$ either has both indices in the left half, both indices in the right half or $i$ in the left half and $j$ in the right half. The first two cases are handled recursively, but how do you efficiently count the "split" inversions where $i \le k / 2  < j$? (hint: sorting may help)
+
+</details>
+
+<details>
+<summary>Solution</summary>
+
 Coming soon!
+
+</details>
+
+**Problem 2.** Assume a group of $n$ friends each independently decide to take a piece of candy from a bowl. Each friend has their own probability of taking a piece of candy; let $p_i$ be the probablity that the $i$th friend takes candy from the bowl (thus with probability $1 - p_i$, they don't take the candy). We want to know, for $k = 0, \dots, n$, the probability that exactly $k$ friends take candy. Note that the probability of all $n$ friends taking candy is $\prod_{i = 1}^n p_i$, while the probability that no one takes candy is $\prod_{i = 1}^n (1 - p_i)$. Give a divide and conquer algorithm to find the probabilities that exactly $k$ friends take candy from the bowl. You may assume that there is always enough candy in the bowl for everyone to take a piece if they choose to. Your algorithm should run in polynomial time, and you can assume $n$ is a power of 2.
+
+<details>
+<summary>Hint 1</summary>
+
+Use Fast Fourier Transform. How can you represent these probabilities as a convolution or polynomial multiplication?
+
+</details>
+
+<details>
+<summary>Hint 2</summary>
+
+Consider a small example where $p_1 = 0.75$ and $p_2 = 0.6$. After finding the probability that we take $k = 0, 1, 2$ candies, create polynomials $q_1 = 0.75x + 0.25$ and $q_2 = 0.6x + 0.4$ and multiply them together. What do the coefficients of our new polynomial represent in this case?
+
+</details>
+
+<details>
+<summary>Solution</summary>
+
+Coming soon!
+
+</details>

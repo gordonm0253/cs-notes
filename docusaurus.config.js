@@ -88,15 +88,6 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
-            items: [
-              {
-                label: 'Notes',
-                to: '/docs/intro',
-              },
-            ],
-          },
-          {
             title: 'Topics',
             items: [
               {
@@ -110,15 +101,6 @@ const config = {
               {
                 label: 'Dynamic Programming',
                 to: '/docs/notes/dynamic-programming',
-              },
-            ],
-          },
-          {
-            title: 'Reference',
-            items: [
-              {
-                label: 'Docusaurus Tutorial',
-                to: '/docs/tutorial-basics/create-a-document',
               },
             ],
           },
