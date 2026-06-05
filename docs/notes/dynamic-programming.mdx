@@ -12,7 +12,11 @@ import BellmanFordVisualizer from '@site/src/components/BellmanFordVisualizer';
 
 ### Top-down (memoization)
 
+This form of DP starts at the “top”, recursively decomposing the problem until hitting the base cases. Results are cached/stored to avoid redundant computation. For example, calculating the $n$th Fibonacci number begins with $fib(n)$, which recurses into $fib(n - 1)$ and $fib(n - 2)$, bottoming out at our base cases $n = 0$ and $n = 1$. 
+
 ### Bottom-up (tabulation)
+
+This form of DP starts at the "bottom", iteratively building up solutions to larger subproblems from smaller ones. We fill a table or array in order, so that each entry is already by the time we need it. For example, when calculating the $n$th Fibonacci number, we start from the bases cases $fib(0) = 0$ and $fib(1) = 1$, then iteratively compute $fib(i) = fib(i - 1) + fib(i - 2)$ for increasing $i$ until we reach $fib(n)$.
 
 ## Tips/Tricks
 
