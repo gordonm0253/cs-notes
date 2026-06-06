@@ -3,10 +3,15 @@ sidebar_position: 3
 ---
 
 import BellmanFordVisualizer from '@site/src/components/BellmanFordVisualizer';
+import DijkstraCounterexample from '@site/src/components/DijkstraCounterexample';
 
 # Dynamic Programming
 
 ## Introduction
+
+In the previous section, we explored greedy algorithms, strategies that build solutions by making locally optimal choices at each step. Greedy algorithms are often fast and simple, but they sometimes fail; some problems require us to consider multiple possible choices before we know which is best.
+
+Dynamic programming (DP) breaks a problem into overlapping subproblems and solve each one only once, storing results for reuse. This caching/storing often reduces exponential time to polynomial. Unlike greedy algorithms, DP explores the full space of subproblem solutions rather than committing to a single choice at each step, making it more broadly applicable at the cost of additional time and space.
 
 ## Types of Dynamic Programming
 
@@ -21,6 +26,14 @@ This form of DP starts at the "bottom", iteratively building up solutions to lar
 ## Tips/Tricks
 
 ## Bellman-Ford
+
+Consider the single-source shortest path problem: given a weighted directed graph $G=(V,E)$ and a source node $s$, find the shortest path from $s$ to every other vertex. Dijkstra's algorithm solves this greedily, but fails on graphs with negative edge weights. Consider the following graph, where we let our source node be $S$.
+
+<DijkstraCounterexample />
+
+If we use Dijkstra's algorithm to find the shortest path from $S$ to $A$, we would greedily select the edge from $S$ to $A$ with weight $2$ and be done. However, we observe that the least cost path is going from $S$ to $B$ and then $B$ to $A$. This failure of Dijkstra's algorithm motivates the Bellman-Ford algorithm, which handles negative edge weights by reformulating shortest paths as a DP problem.
+
+
 
 <BellmanFordVisualizer />
 
