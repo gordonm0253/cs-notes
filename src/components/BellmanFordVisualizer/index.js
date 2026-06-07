@@ -247,7 +247,7 @@ function DpTable({step}) {
       <table className={styles.dpTable}>
         <thead>
           <tr>
-            <th scope="col">k</th>
+            <th scope="col">i</th>
             {nodes.map((node) => (
               <th scope="col" key={node.id}>
                 {node.id}
@@ -308,7 +308,7 @@ export default function BellmanFordVisualizer() {
       </div>
 
       <div className={styles.recurrence}>
-        <code>dp[k][v] = min(dp[k - 1][v], min(dp[k - 1][u] + w(u, v)))</code>
+        <code>dp[i][v] = min(dp[i - 1][v], min(dp[i - 1][u] + w(u, v)))</code>
       </div>
 
       <div className={styles.mainGrid}>

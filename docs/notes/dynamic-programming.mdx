@@ -23,7 +23,7 @@ This form of DP starts at the “top”, recursively decomposing the problem unt
 
 This form of DP starts at the "bottom", iteratively building up solutions to larger subproblems from smaller ones. We fill a table or array in order, so that each entry is already by the time we need it. For example, when calculating the $n$th Fibonacci number, we start from the bases cases $fib(0) = 0$ and $fib(1) = 1$, then iteratively compute $fib(i) = fib(i - 1) + fib(i - 2)$ for increasing $i$ until we reach $fib(n)$.
 
-## Tips/Tricks
+## General Framework
 
 Dynamic programming encompasses a wide variety of problem types, but most can be solved by working through the same core questions. The following tips and techniques address each one.
 
@@ -72,11 +72,36 @@ Consider the single-source shortest path problem: given a weighted directed grap
 
 <DijkstraCounterexample />
 
-If we use Dijkstra's algorithm to find the shortest path from $S$ to $A$, we would greedily select the edge from $S$ to $A$ with weight $2$ and be done. However, we observe that the least cost path is going from $S$ to $B$ and then $B$ to $A$. This failure of Dijkstra's algorithm motivates the Bellman-Ford algorithm, which handles negative edge weights by reformulating shortest paths as a DP problem.
+If we use Dijkstra's algorithm to find the shortest path from $S$ to $A$, we would greedily select the edge from $S$ to $A$ with weight $2$ and be done. However, we observe that the least cost path is $S \rightarrow B \rightarrow A$ (total cost $5 + (-4) = 1$). 
 
+This failure of Dijkstra's algorithm motivates the Bellman-Ford algorithm, which handles negative edge weights by reformulating shortest paths as a DP problem. We add the constraint that the input graph $G$ has no negative weight cycles (otherwise there is no shortest path, as we could repeatedly take the cycle path to lower our overall cost).
 
+We first observe that any shortest path in the graph with $n = |V|$ nodes uses at most $n - 1$ edges. A simple path cannot repeat vertices; a non-sample path would contain a cycle, which either has positive cost (and can be removed) or negative cost (contradicting our negative-cost cycle assumption).
+
+We define the subproblem $OPT(i, v)$ to be cost of the shortest path from source node $s$ to $v$ using at most $i$ edges. The previous observation gives us a finite bound $(n - 1)$ on the number of edges any shortest path can use.
+
+Our base cases are $OPT(0, s) = 0$ and $OPT(0, v) = \infty$ for all $v \ne s$ (impossible to reach node $v \ne s$ using $0$ edges). For our recurrence, the shortest path can use at most $i - 1$ edges (no change), or it arrives at $v$ via some edge $(u, v)$ using at most $i - 1$ edges to reach $u$:
+
+$$
+\begin{align*}
+OPT(i, v) = \min\left(OPT(i - 1, v), \min_{(u, v) \in E} \left[ OPT(i - 1, u) + w(u, v) \right] \right)
+\end{align*}
+$$
+
+To fill out the table, we can fill it out for each of the $n - 1$ rounds, iterating through each node to update its minimum-path cost. We output $OPT(n - 1, v)$ for all $v$ as our final answer. 
+
+The table has dimensions $n \times |V|$, so there are $O(n \cdot |V|)$ cells to fill. The cost per cell isn't $O(1)$; to compute $OPT(i, v)$, we take the minimum over all incoming edges to $v$, which varies by vertex. If we sum the work across all vertices in a single round $i$:
+
+$$
+\begin{align*}
+\sum_{v \in V} \deg(v) = O(|E|)
+\end{align*}
+$$
+
+since each edge $(u, v) \in E$ contributes one or two computations (depending on an undirected or directed graph) to nodes $u$ and $v$. Since we drop constants, each round requires $O(|E|)$ work, giving a total time complexity of $O(|V| \cdot |E|)$.   
 
 <BellmanFordVisualizer />
+
 
 ## Segmented Least Squares
 
