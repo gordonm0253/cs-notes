@@ -25,6 +25,47 @@ This form of DP starts at the "bottom", iteratively building up solutions to lar
 
 ## Tips/Tricks
 
+Dynamic programming encompasses a wide variety of problem types, but most can be solved by working through the same core questions. The following tips and techniques address each one.
+
+**1. Identify Subproblems and State**
+
+Often, one of the hardest parts of DP is figuring out what a "subproblem" looks like. You should ask yourself: what information do I need to fully describe the state of the problem at any point?
+
+Some common subproblem structures include:
+- **Including/excluding an element:** should I take element $i$ or not?
+- **Prefix/suffix:** optimal solution on the first $i$ elements
+- **Interval:** optimal solution on subarray $[i, j]$
+- **Remaining capacity:** items and budget/weight left (e.g. knapsack)
+
+Once you've identified the subproblem structure, you should make it precise! Write a one/two sentence definition of $OPT(i)$; this forces you to commit to exactly what the subproblem is optimizing, which makes the recurrence much easier to write correctly.
+
+**2. Write the recurrence relation and base case**
+
+After defining $OPT(i)$, you should ask yourself: how does $OPT(i)$ relate to strictly smaller subproblems? This gives your recurrence. Don't forget to consider all cases (e.g. edge cases, zero capacity)! 
+
+Base cases are where the recurrence "bottoms out". You should ask yourself: what is the smallest valid input to your table, and what is the answer there by definition (not by recurrence)? 
+
+**3. Computation Order**
+
+You should compute each subproblem only after all subproblem it depends on. You can determine the dependency direction from your reccurence. Think about which subproblems need to be solved first, and which ones depend on others.
+
+**4. Correctness**
+
+Prove correctness by strong induction on the subproblem "size" (however you have defined it in your solution). With the inductive structure, first verify that the smallest subproblems are corrctly computed with the base cases. After, assume $OPT(i')$ is correct for all $i' < i$ (inductive hypothesis). Show that the recurrence for $OPT(i)$ produces the correct answer.
+
+**5. Runtime** 
+
+You should analyze the runtime by considering the number of subproblems $\times$ the work per subproblem. In addition, you should consider any precomputations done before filling in the table entries (e.g. computing prefix sums), as well as any steps required for solution reconstruction.
+
+**6. Solution Reconstruction**
+
+Often, the answer for your DP problem can be found by simply looking into an $OPT$ table value. Other times, you may need to iterate over your table and take the optimum across select entries. Another common pattern for solution reconstruction is backtracking; sometimes, we don't just care about the numerical value of our solution, but rather the steps (for example, after running Bellman-Ford, we might want to return the total cost AND the nodes along the least-cost path). To do this, you should:
+
+- During the forward pass, store a point at each table entry that records which case the recurrence takes.
+- Trace back from the final state following these pointers (backtracking from your final solution to recover the path).
+
+Remember to include these steps in your runtime analysis!
+
 ## Bellman-Ford
 
 Consider the single-source shortest path problem: given a weighted directed graph $G=(V,E)$ and a source node $s$, find the shortest path from $s$ to every other vertex. Dijkstra's algorithm solves this greedily, but fails on graphs with negative edge weights. Consider the following graph, where we let our source node be $S$.
