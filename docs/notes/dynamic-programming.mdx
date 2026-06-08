@@ -98,7 +98,7 @@ $$
 \end{align*}
 $$
 
-since each edge $(u, v) \in E$ contributes one or two computations (depending on an undirected or directed graph) to nodes $u$ and $v$. Since we drop constants, each round requires $O(|E|)$ work, giving a total time complexity of $O(|V| \cdot |E|)$.   
+since each edge $(u, v) \in E$ contributes one or two computations (depending on an undirected or directed graph) for nodes $u$ and $v$. Since we drop constants, each round requires $O(|E|)$ work, giving a total time complexity of $O(|V| \cdot |E|)$.   
 
 <BellmanFordVisualizer />
 
@@ -107,6 +107,34 @@ since each edge $(u, v) \in E$ contributes one or two computations (depending on
 
 ## Knapsack Problem
 
+The knapsack problem is a classic dynamic programming example. We have $n$ items with weight $w_i$ and value $v_i$ with an overall weight constraint $W$. We want to select some set of items $S \subseteq \{1, \dots, n\}$ such that the total weight $\sum_{i \in S} w_i \le W$ and the total value $\sum_{i \in S} v_i$ is maximized.
+
+We can't solve this greedily; taking the highest-value items or best value-to-weight ratio first can both lead to suboptimal solutions (often times a combination of smaller, lower-ratio items fits better and gives more total value). This forces us to consider some subsets; however, there are $2^n$ of them. Dynamic programming gives us a way to avoid this exponential blowup by identifying the right subproblem structure.
+
+We observe that deciding whether to include item $i$ is a binary choice: we either take it or leave it. If we take it, we use $w_i$ of our capacity and gain $v_i$ in value, leaving us with a smaller knapsack on the remaining items. If we choose not to take the item, the problem reduces to the same capacity with one fewer item to consider.
+
+Thus, we let our $OPT[i][w]$ be the max value possible with items $1, \dots, i$ and weight limit $w$. For our base cases, we let $OPT[i][0] = 0$ for all $i$ and $OPT[0][w] = 0$ for all $w$. Intuitively, a weight limit of zero leaves no room for any item, and considering zero items leaves nothing to select; in both cases, the achievable value is 0.
+
+Using our observation, we have two cases to consider in our recurrence $OPT[i][w]$.
+
+- **Leave item $i$**: item $i$ is not included, so the optimal value is just $OPT[i - 1][w]$, which is the best we can do with the first $i - 1$ items and the same capacity.
+- **Take item $i$**: item $i$ is included, contributing $v_i$ to our value and consuming $w_i$ of our capacity. The remaining capacity $w - w_i$ must be allocated optimally among the first $i - 1$ items, giving $v_i + OPT[i - 1][w - w_i]$. This case is valid when $w_i \le w$. 
+
+Taking the better of the two choices, we have the recurrence:
+
+$$
+\begin{align*}
+OPT[i][w] = \begin{cases} OPT[i-1][w] & \text{if } w_i > w \\ \max(OPT[i-1][w],\ v_i + OPT[i-1][w - w_i]) & \text{otherwise} \end{cases}
+\end{align*}
+$$
+
+To fill out the OPT table, we let our outer loop iterate from $1, \dots, n$ and inner loop iterate from $1, \cdots W$ (this way, each subproblem $OPT[i][w]$ is computed only after $OPT[i - 1][w]$ and $OPT[i - 1][w - w_i]$ are already filled). After filling out the entire table, we output $OPT[n][W]$ as our final answer.
+
+The table has $(n + 1) \times (W + 1)$ entries, each of which are filled in $O(1)$ time using our recurrence (only 1 or 2 choices per table entry). Our total runtime is $O(nW)$. 
+
+:::note
+This is a **pseudo-polynomial** algorithm: it is polynomial in the numeric value of W, but W can be exponential in the number of bits needed to represent it. The algorithm is efficient when $W$ is small, but can be exponentially slow when given a large $W$.
+:::
 ## Practice
 
 **Problem 1.** Given two lists of integers, find the length of their longest common subsequence. A *subsequence* is a new sequence derived from an existing sequence by deleting some or all of its elements without changing the relative order of the remaining elements. A *common subsequence* appears in both arrays.
