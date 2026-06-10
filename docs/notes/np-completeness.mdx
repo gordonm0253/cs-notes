@@ -6,9 +6,55 @@ sidebar_position: 6
 
 ## Introduction
 
+So far, we have designed efficient algorithms for a wide range of problems. But not all problems are so accomodating. In this section, we examine a class of problems for which no polynomial time algorithm is known (and for which there is strong theoretical reason to believe none exists).
+
+## Definitions
+
+We study NP-completeness in the setting of decision problems, or problems with a yes/no answer. This is not much of a restriction, since most optimization problems that we have previously studied have a natural decision version (e.g. "for a graph $G=(V,E)$, does there exist a traveling salesman tour of cost at most $k$?").
+
 ## General Framework
 
 ## Known NP-Complete Problems
+
+The known NP-complete problems fall into several natural categories. On assignments or exams, you may freely cite NP-complete problems that have appeared in class, previous assignments, or in the textbook.
+
+### Packing Problems
+
+If your problem has a parameter $k$ for which as $k$ gets larger the problem gets harder, try reducing from:
+
+- **Independent Set:** Given an undirected graph $G = (V, E)$ and integer $k$, we say that a set of nodes $S \subseteq V$ is independent if no two nodes in $S$ are joined by an edge. Does there exist an independent set of size at least $k$?
+- **Set Packing:** Given a universe $U$, subsets $S_1, \dots, S_m \subseteq U$, and an integer $k$, does there exists a subcollection of $\{S_1, \dots, S_m\}$ of at least $k$ pairwise-disjoint subsets?
+
+### Covering Problems
+
+If your problem has a parameter $k$ for which as $k$ gets larger the problem gets easier, try reducing from:
+
+- **Vertex Cover:** Given an undirected graph $G = (V, E)$ and an integer $k$, we say that a set of nodes $S \subseteq E$ if every edge $e \in E$ has at least one endpoint in $S$. Does there exist a vertex cover of size at most $k$?  
+- **Set Cover:** Given a universe $U$, subsets $S_1, \dots, S_m \subseteq U$, and an integer $k$, does there exist a subcollection of $\{S_1, \dots, S_m\}$ of at most $k$ sets whose union is all of $U$? 
+
+### Partitioning Problems
+
+If your problem involves dividing elements into disjoint groups, try reducing from:
+
+- **3D Matching:** Given disjoint sets $X, Y, Z$ each of size $n$, a set of triples $T \subseteq X \times Y \times Z$, does there exist a set of $n$ triples in $T$ such that every element of $X \cup Y \cup Z$ is contained in exactly one of these triples?
+- **3-Coloring:** Given an undirected graph $G = (V, E)$, does $G$ have a 3-coloring?
+
+### Sequencing Problems
+
+If your problem involves giving an ordering over $n$ items, try reducing from:
+
+- **Hamiltonian Cycle:** Given a graph $G$ (either directed or undirected), is there a Hamiltonian cycle (a path starts and ends with the same node and visits every other node exactly once)?
+- **Hamiltonian Path:** Given a graph $G$ (either directed or undirected), start node $s$ and end node $t$, is there a Hamiltonian path starting at $s$ and ending at $t$?
+
+### Other
+
+If your problem involves summing over numeral values to reach a target, try reducing from:
+
+- **Subset Sum:** Given nonnegative integers $w_1, \dots, w_n$ and a target integer $W$, does there exist $I \subseteq \{1, \dots, n\}$ such that $\sum_{i \in I} w_i = W$?
+
+If all else fails, try 3-SAT!
+
+- **3SAT:** Given a CNF with clauses of 3 literals each, does there exist a satisfying assignment?
 
 ## Example Problem: Graph-Selection
 
