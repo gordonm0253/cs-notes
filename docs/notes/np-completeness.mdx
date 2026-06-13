@@ -16,7 +16,7 @@ We say a (decision) problem $A$ is in NP if a proposed solution can be verified 
 
 A polynomial reduction reduction from problem $A$ to problem $B$, written as $A \le_P B$, is a polynomial-time computable function $f$ such that for any instance $x$ of $A$, $x$ is a yes-instance of $A$ if and only if $f(x)$ is a yes-instance of $B$. Intuitively, this means $A$ is "no harder" than $B$; given an efficient algorithm for $B$, we obtain an efficient algorithm for $A$ by transforming instances via $f$ and running $B$'s algorithm on the result. Note the direction; $A \le_P B$ means $B$ is at least as hard as $A$, a fact we will use when proving NP-hardness.
 
-We say a problem $B$ is NP-hard if $A \le_P B$ for every problem $A \in \mathrm{NP}$ Intuitively, $B$ is at least as hard as every problem in NP; solving $B$ efficiently would let us solve all of $NP$ efficiently.
+We say a problem $B$ is NP-hard if $A \le_P B$ for every problem $A \in \mathrm{NP}$. Intuitively, $B$ is at least as hard as every problem in NP; solving $B$ efficiently would let us solve all of $NP$ efficiently.
 
 We say $A$ is NP-Complete if and only if the following conditions are true:
 
@@ -25,7 +25,19 @@ We say $A$ is NP-Complete if and only if the following conditions are true:
 
 ## General Framework
 
+NP-completeness proofs are an important part of CS4820, and they are sure to show up on exams. If you want to show that some decision problem $A$ is NP-complete, the proof generally has 4 steps, as follows:
 
+1. $A \in \mathrm{NP}$. Show that there is a polynomial-time verifier for $A$. It should take in an instance of the problem Foo and a certificate (possible solution) to that instance, answering 'yes' if certificate is a correct solution and 'no' otherwise. This is usually straightforward and should almost always be done first. Don't forget to argue why the verifier runs in polynomial time!
+2. Reduce from some NP-complete problem $X$ to $A$ (i.e. showing $X \le_P A$). You should pick a known NP-complete problem $X$. Your goal is to solve $X$ using an algorithm that solves $A$. You should do this by "reducing" or translating an arbitrary instance of $X$ into an equivalent instance of $A$. This way, if you have an algorithm that solves $A$, you can solve $X$ by reducing the problem to $A$ and running the algorithm for $A$.
+3. Show that the reduction takes polynomial time. Make sure you aren't creating exponentially many gadgets/nodes!
+4. Show that your reduction is equivalent. In other words, $x$ is a yes-instance of $X$ iff $f(x)$ is a yes-instance of $A$ (where $f$ is our reduction function). This has two parts. 
+
+- $(\Rightarrow)$ If $x$ is a yes-instance of $X$, then $f(x)$ is a yes-instance of $A$. Typically, you show this by taking an arbitrary solution to $x$ and explicitly constructing a corresponding solution to $f(x)$.
+- $(\Leftarrow)$ If $f(x)$ is a yes-instance of $A$, then $x$ is a yes-instance of $X$. You show this by taking a solution to $f(x)$ and explicitly constructing a corresponding solution to $x$. This is often the harder direction, since you need to consider all possible solutions to $f(x)$ (not just the ones you had in mind while making the reduction construction).
+
+:::note
+Please do not reduce the wrong way! If you do, you will probably lose a lot of points...
+:::
 
 ## Example Problem: Independent Set
 
