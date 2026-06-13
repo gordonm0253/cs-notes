@@ -12,6 +12,12 @@ So far, we have designed efficient algorithms for a wide range of problems. But 
 
 We study NP-completeness in the setting of decision problems, or problems with a yes/no answer. This is not much of a restriction, since most optimization problems that we have previously studied have a natural decision version (e.g. "for a graph $G=(V,E)$, does there exist a traveling salesman tour of cost at most $k$?").
 
+We say a (decision) problem $A$ is in NP if a certificate for $A$ can be verified in polynomial time. For example, a certificate for a SAT instance is a truth assignment to its variables; we can check in polynomial time whether this assignment satisfies the SAT formula.
+
+A polynomial reduction reduction from problem $A$ to problem $B$, written as $A \le_P B$, is a polynomial-time algorithm that transforms any instance of $A$ into an instance $B$ such that the answer is preserved; that is, 
+
+We say $A$ is NP-Complete if and only if $A$ in NP and $A$ is NP-Hard.
+
 ## General Framework
 
 ## Known NP-Complete Problems

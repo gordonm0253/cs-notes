@@ -116,6 +116,10 @@ Proof coming soon!
 
 Proof coming soon!
 
+### Runtime Analysis
+
+We can make our algorithm run in $O(n \log n)$ time. We first sort the $n$ jobs in order of finishing time in $O(n \log n)$ time. We select jobs by processing the intervals in this sorted order, maintaining the finish time of the most recently selected job; for each job, we check whether its start time is at least this finish time, which takes $O(1)$ time per job, giving $O(n)$ total. The overall runtime is dominated by the sort, so the algorithm runs in $O(n \log n)$ time.
+
 ## Minimum Spanning Tree
 
 Suppose we have an connected, undirected graph $G = (V, E)$, where edge $e \in E$ has some positive edge weight $c_e$. We want to find the a subset of the edges $T \subseteq E$ such that the graph $(V, T)$ is still connected and the sum of edge costs $\sum_{e \in T} c_e$ is minimized. We call $T$ the minimum spanning tree of our graph $G$. 
