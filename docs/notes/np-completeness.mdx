@@ -12,13 +12,22 @@ So far, we have designed efficient algorithms for a wide range of problems. But 
 
 We study NP-completeness in the setting of decision problems, or problems with a yes/no answer. This is not much of a restriction, since most optimization problems that we have previously studied have a natural decision version (e.g. "for a graph $G=(V,E)$, does there exist a traveling salesman tour of cost at most $k$?").
 
-We say a (decision) problem $A$ is in NP if a certificate for $A$ can be verified in polynomial time. For example, a certificate for a SAT instance is a truth assignment to its variables; we can check in polynomial time whether this assignment satisfies the SAT formula.
+We say a (decision) problem $A$ is in NP if a proposed solution can be verified in polynomial time. More precisely, there exists a polynomial-time algorithm that, given an instance $x$ of $A$ and a certificate $c$, correctly determines whether $c$ proves that $x$ is a yes-instance of problem $A$. For example, a certificate (proposed solution) for a SAT instance is a truth assignment to its variables; we can check in polynomial time whether this assignment satisfies the SAT formula.
 
-A polynomial reduction reduction from problem $A$ to problem $B$, written as $A \le_P B$, is a polynomial-time algorithm that transforms any instance of $A$ into an instance $B$ such that the answer is preserved; that is, 
+A polynomial reduction reduction from problem $A$ to problem $B$, written as $A \le_P B$, is a polynomial-time computable function $f$ such that for any instance $x$ of $A$, $x$ is a yes-instance of $A$ if and only if $f(x)$ is a yes-instance of $B$. Intuitively, this means $A$ is "no harder" than $B$; given an efficient algorithm for $B$, we obtain an efficient algorithm for $A$ by transforming instances via $f$ and running $B$'s algorithm on the result. Note the direction; $A \le_P B$ means $B$ is at least as hard as $A$, a fact we will use when proving NP-hardness.
 
-We say $A$ is NP-Complete if and only if $A$ in NP and $A$ is NP-Hard.
+We say a problem $B$ is NP-hard if $A \le_P B$ for every problem $A \in \mathrm{NP}$ Intuitively, $B$ is at least as hard as every problem in NP; solving $B$ efficiently would let us solve all of $NP$ efficiently.
+
+We say $A$ is NP-Complete if and only if the following conditions are true:
+
+- $A \in \mathrm{NP}$: there exists a verifier that can check proposed solutions to an instance $x$ of $A$ in polynomial time. 
+- $A$ is NP-hard. To show this, we produce a polynomial-time reduction $B \le_P A$ from some problem $B$ already known to be NP-hard. By transitivity of $\le_P$, since every problem in NP reduces to B (as B is NP-hard) and $B \le_P A$, every problem in NP also reduces to $A$; so $A$ is NP-hard. 
 
 ## General Framework
+
+
+
+## Example Problem: Independent Set
 
 ## Known NP-Complete Problems
 
@@ -62,9 +71,9 @@ If all else fails, try 3-SAT!
 
 - **3SAT:** Given a CNF with clauses of 3 literals each, does there exist a satisfying assignment?
 
-## Example Problem: Graph-Selection
+## Practice
 
-Suppose we have a graph $G = (V, E)$. You are given two disjoint sets $E_{good}$ and $E_{bad}$, and a vertex set $C \subseteq V$. The Graph-Selection problem is to determine whether there exists a vertex set $P$ such that:
+**Problem 1**. [Graph Selection] Suppose we have a graph $G = (V, E)$. You are given two disjoint sets $E_{good}$ and $E_{bad}$, and a vertex set $C \subseteq V$. The Graph-Selection problem is to determine whether there exists a vertex set $P$ such that:
 
 - $C \subseteq P$
 - For all $v \in P$, there is a $u \in P$ such that $(u, v) \in E_{good}$ 
@@ -99,5 +108,3 @@ With the previous setup, what should our bad edge set $E_{bad}$ be?
 Solution coming soon!
 
 </details>
-
-## Practice
