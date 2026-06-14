@@ -41,6 +41,44 @@ Please do not reduce the wrong way! If you do, you will probably lose a lot of p
 
 ## Example Problem: Independent Set
 
+Independent Set: Given an undirected graph $G = (V, E)$ and integer $k$, we say that a set of nodes $S \subseteq V$ is **independent** if no two nodes in $S$ are joined by an edge. Does there exist an independent set of size at least $k$?
+
+Show that Independent Set is NP-Complete.
+
+We first show that Independent Set is in NP. Given a graph instance $G = (V, E)$ and certificate (proposed solution) $S$, we check that the following conditions are true. If any of them do not hold, then we output "no". Otherwise, we output "yes".
+
+- Check that $S$ is at least size $k$ (verify $|S| \ge k$).
+- For each pair of nodes $u, v \in S$ with $u \ne v$, ensure $(u, v) \notin E$. In other words, no node pair in $S$ should form an edge in $G$.
+
+We observe that this verifier runs in polynomial time. Since $S \subseteq V$, checking the first condition takes $O(|V|)$ time. For the second condition, we consider all pairs of nodes in $S$ and check membership in $E$; there can be at most $O(|V|^2)$ pairs and a naive membership check in $E$ takes $O(|E|)$ time. Thus, our verifier runs in $O(|V|^2 \cdot |E|)$ time, which is indeed polynomial.
+
+We show that Independent Set is NP-Hard by showing a reduction from 3SAT. 
+
+Recall that 3SAT gives a 3CNF (AND of ORs) of clauses with exactly three variables, where the 3CNF is satisfiable if there exists a boolean assignment of variables that satisfy all clauses. For example, the following 3CNF is satisfiable by setting $x_1$ and $x_3$ to be true and $x_{2}$ to be false (there are other satisfying sets of variable assignments).
+
+$$
+
+\begin{align*}
+(x_1 \lor \lnot x_3 \lor x_2) \land (\lnot x_1 \lor \lnot x_3 \lor \lnot x_2) \land (\lnot x_1 \lor x_3 \lor x_2) 
+\end{align*}
+$$
+
+Given a 3CNF $\phi$ of $m$ clauses and $n$ variables, we create a graph $G$ that we can run an algorithm for Independent Set on. For clause $i$, we create 3 nodes $x_{ij_1}$, $x_{i j_2}$, and $x_{i j_3}$, representing the three literals in clause $i$. We connect these three nodes with edges forming a triangle. Additionally, for every pair of nodes representing a variable and its negation (i.e. $x_{ij}$ and $\lnot x_{ij}$) across all clauses, we add an edge between them. We set $k = m$. 
+
+We argue that this reduction takes polynomial time. For each of the $m$ clauses, we create 3 nodes and 3 edges (to connect them all together) in our graph. In addition, we connect all pair of nodes representing variables and their negation. There are at most $(3m)^2 = O(m^2)$ pairs possible, so we can reduce our 3SAT instance to an Independent Set instance in $O(m^2 + m) = O(m^2)$ time, which is polynomial.
+
+The intution is that each clause is represented by a gadget of "nodes" in our graph $G$. Since $k = m$ in our Independent Set instance, we must pick exactly one node from each clause gadget to be in the independent set $S$ (the triangle edges prevent picking two nodes from the same gadget). Picking a node $x_{ij}$ corresponds to setting that literal to true. The consistency edges between contradictory literal pairs ensure we never pick both a variable and its negation (which would violate the independent set property), so the assignment is well-defined and satisfies every clause.
+
+$(\Rightarrow)$ Suppose the 3CNF $\phi$ is satisfiable. We show that a satisfying assignment of variables to a 3SAT instance implies an independent set solution to our constructed graph. Fix a satisfying assignment. For each clause $i$, at least one of its three literals is true under this assignment; pick one such true literal and include its corresponding node $x_{ij}$ in $S$. This gives $|S| = m \ge k$.
+
+We check that $S$ is independent. No two nodes lie in the same clause gadget, since we picked exactly one per gadget (no triangle edges are present within $S$). Also, no two chosen nodes correspond to a variable and its negation: since both nodes would have to present true literals under the same assignment, a variable and its negation cannot both be true. Hence, no consistency edge connects two nodes of $S$. So $S$ is an independent set of size $m = k$.
+
+$(\Leftarrow)$ Suppose $G$ has an independent set $S$ with $|S| = k = m$ (we know it cannot go any higher because exactly one node can be picked per clause gadget, and there are $m$ of them). 
+
+Define a variable assignment by setting each literal corresponding to a node in $S$ to true (if a variable has neither literal represented in $S$, then assign it arbitrarily). This assignment is well defined; if both $x_{ij}$ and $\lnot x_{i'j}$ were in $S$, it would not be an independent set because they are connected by an edge. So no variable is assigned conflicting values. Since $S$ contains one node per clause gadget, every cluase has at least one literal set to true, so every clause is satisfied. Hence $\phi$ is satisfiable.
+
+Therefore, our 3CNF $\phi$ is satisfiable if and only if $G$ has an independent set of size $k = m$, completing the reduction. Combined with the polynomial-time verifier shown earlier, Independent set is NP-complete. 
+
 ## Known NP-Complete Problems
 
 The known NP-complete problems fall into several natural categories. On assignments or exams, you may freely cite NP-complete problems that have appeared in class, previous assignments, or in the textbook.
