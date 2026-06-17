@@ -155,6 +155,39 @@ With the previous setup, what should our bad edge set $E_{bad}$ be?
 <details>
 <summary>Solution</summary>
 
-Solution coming soon!
+
+We first show that Graph Selection is in NP. Given a Graph Selection instance consisting of graph $G = (V, E)$, edge sets $E_{good}$ and $E_{bad}$, and set $C \subseteq V$, we take in a certificate set $P$ and check the following conditions. If any of them are false, we reject $P$ (outputting "no"). Otherwise, if all conditions hold, output "yes".
+- $C \in P$. This takes $O(|V|)$ time.
+- For all $v \in P$, there is a $u \in P$ such that $(u, v) \in P_{good}$. We can check this by fixing each $v \in P$ and checking through all $u \in P$ with $u \ne v$ to see if $(u, v) \in E_{good}$; if no $u \in P$ satisfies this, then we can reject $P$. We enumerate of all possible pairs in $P \subseteq V$, so we take $O(|V|^2)$ time for this check. 
+- For all $(u, v) \in E_{bad}$, either $u \notin P$ or $v \notin P$. We check over all edges $(u, v) \in E_{bad}$. If there exists $e = (u', v')$ such that $u' \in P$ and $v' \in P$, then we reject $P$. Since $E_{bad} \subseteq E$, this step takes $O(|E|)$ time.
+
+Our verifier has an overall runtime of $O(|V|^2 + |E|)$, which is indeed polynomial.
+
+We show that Graph Selection is NP-Hard by showing a reduction from 3SAT.
+
+Given a 3CNF $\phi$ of $m$ clauses and $n$ variables, we create a graph $G$ that we can run an algorithm for Graph Selection on. We create the following nodes
+
+- For each variable $x_i$, we create two nodes $t_i$ and $f_i$. 
+- For each clause $C_j$, create a clause node $c_j$. 
+- Let $C = \{c_j : 1 \le j \le m \}$. 
+
+Next, we create the following edges.
+
+- For every variable $x_i$, create an edge $(t_i, f_i)$. Let $E_{bad}$ be the set of all these edges.
+- For every clause $C_j$ with corresponding node $v_j$, we create three edges and place them all in $E_{good}$. Let $x_a, x_b, x_c$ be the 3 variables in the clause. For each of the three variables: if some literal $x_i$ is in the clause, we put in edge $(c_j, t_i)$; otherwise, if some literal $\lnot x_i$ is in the clause, we put in edge $(c_j, f_i)$.
+
+We run Graph-Selection on this input and output whatever it outputs. This reduction runs in polynomial time. We create $2n + m$ nodes and $n + 3m$ edges, which is polynomial in the size of the input 3CNF.
+
+We now show that the original 3SAT instance $\phi$ has a solution iff this instance of Graph-Selection has a solution.
+
+$(\Rightarrow)$ Suppose our 3SAT instance $\phi$ is satisfiable. Fix a satisfying assignment of variables. We let our set $P_0$ be:
+
+$$
+\begin{align*}
+P_0 = C \cup \{t_i \mid x_i \text{ set to TRUE} \} \cup \{f_i \mid x_i \text{ set to FALSE} \}
+\end{align*}
+$$
+
+Proof continued soon!
 
 </details>
