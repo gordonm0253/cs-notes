@@ -8,7 +8,53 @@ import FlowNetworkVisualizer from '@site/src/components/FlowNetworkVisualizer';
 
 ## Introduction
 
+Many optimization problems reduce to routing as much "stuff" as possible through a network subject to capacity limits, such as traffic through roads, data through pipes, and goods through supply chains. Network flow formalizes this and gives efficient algorithms with broad applications (e.g. bipartite matching).
+
+The central problem: given a directed graph with edge capacities, a source and sink node, find the maximum amount of flow that can be routed from source to sink without violating any capacity or conservation constraints.
+
 ## Definitions
+
+**Flow Network**. A flow network is a directed graph $G = (V, E)$ where each edge $e \in E$ has capacity $c_e \ge 0$, a source node $s \in V$ and sink node $t \in V$. We assume no edge enters $s$ and no edge leaves $t$.
+
+**Flow.** A **flow** is a function $f: E \rightarrow \mathbb{R}_{\ge 0}$ satisfiying the following two conditions:
+
+- **Capacity constraint.** For every edge $e \in E$: $f(e) \le c_e$.
+- **Conservation constraint.** For every node $v \in V \setminus \{s, t\}$:
+
+$$
+\begin{align*}
+\sum_{e \text{ into } v} f(e) = \sum_{e \text{ out of } v} f(e)
+\end{align*}
+$$
+
+That is, the flow in equals flow out at every internal node.
+
+**Value of a flow**. The value of a flow is the total flow leaving the source:
+
+$$
+\begin{align*}
+\text{value}(f)= \sum_{e \text{ out of } s} f(e)
+\end{align*}
+$$
+
+**Maximum flow problem.** Given a flow network $(G, c, s, t)$, find a flow $f$ maximizing $|f|$.
+
+**Residual graph.** Given a flow $f$, the residual graph $G_f = (V, E_f)$ captures remaining capacity. For each edge $(u, v) \in E$.
+
+- Add a forward edge $(u, v)$ with residual capacity $c_e - f_e$ if $e = (v, w)$ and $f_e < c_e$.
+- Add a backwards edge $(v, u)$ with residual capacity $f_e$ if if $e = (v, w)$ and $f_e > 0$.
+
+These backward edges allow us to "cancel" or undo any previously routed flow.
+
+**Augmenting path**. An augmenting path is any path from $s$ to $t$ in the residual graph $G_f$. We say the bottleneck capacity of path $P$ is:
+
+$$
+\begin{align*}
+\text{bottleneck}(P) = \min( \min_{\text{forward } e \in P} (c_e - f_e), \min_{\text{backward } e \in P} f_e).
+\end{align*}
+$$
+
+In other words, it is the maximum flow we can add/subtract onto any foward/backward edge along $P$ without violating any capacity constraints (without exceed $c_e$ or going below 0).
 
 ## Ford-Fulkerson
 
