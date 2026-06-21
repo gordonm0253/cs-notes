@@ -187,6 +187,44 @@ We can implement Prim's algorithm using a min priority queue. We can extract eac
 
 <MSTVisualization />
 
+### Proof of Kruskal's Algorithm
+
+Coming soon!
+
+### Cut Property
+
+When building a MST, we'd like a way to confirm that a particular edge must belong to it (ideally without examining every spanning tree!). This is where the cut property comes in.
+
+A **cut** of a graph $G = (V, E)$ is a partition of the vertex set into two nonempty disjoint sets $S$ and $V \setminus S$. An edge $e = (u, v)$ crosses the cut if one endpoint lies in $S$ and the other lies in $V \setminus S$.
+
+**Cut Property**. Let $(S, V \setminus S)$ be any cut of a connected, weighted graph $G$. If $e$ is an edge of minimum weight among all edges crossing the cut, then there exists a minimum spanning tree of $G$ that contains $e$. If all edge weights are distinct, this strengthens to: every MST contains $e$.
+
+Proof: Let $T$ be any MST $G$, and suppose $T$ does not contain $e = (u, v)$.
+
+1. Since $T$ is a spanning tree, there is a unique path $P$ in $T$ from $u$ to $v$. 
+2. Because $u$ and $v$ lie on opposite sides of the cut, $P$ must cross the cut at least once. Let $e'$ be an edge of $P$ that crosses the cut.
+3. By assumption, $c_e \le c_{e'}$, since $e$ is a minimum-weight crossing edge.
+4. Form $T' = T - e' + e$. Removing $e'$ from $T$ splits it into two components; adding $e$ reconnects them (since $e$ also crosses the cut), so $T'$ is again a spanning tree.
+5. Let $w(T)$ be the total edge weight of spanning tree $T$. We have that $w(T') = w(T) - c_{e'} + c_e \le w(T)$
+
+Since $T$ was minimum, $w(T') \ge w(T)$ as well, so $w(T') = w(T)$, meaning $T'$ is also an MSt, and it contains $e$.
+
+To prove the stengthening of our claim, now assume that all edge weights are distinct. Suppose for contradiction's sake that some MST $T$ does not contain $e$. Consider a similar argument with the path $P$, crossing edge $e' \ne e$, and the inequality $c_{e} \le c_{e'}$ (since $e$ is the minimum cost edge crossing that cut). Since weights are distinct and $e \ne e'$, the previous inequality is strict:
+
+$$
+\begin{align*}
+c_{e} < c_{e'}
+\end{align*}
+$$
+
+Consider the exchange of $e'$ for $e$ to produce new tree $T'$.
+
+$$
+w(T') = w(T) - c_{e'} + c_{e} < w(T)
+$$
+
+so $T'$ is a spanning tree with less total edge weight than $T$, contradicting the minimality of $T$. Hence, every MST must contain $e$.
+
 ## Practice
 
 **Problem 1.** Suppose we have a undirected graph $G = (V, E)$ with edge weights $c_e > 0$ for each edge $e \in E$, and a minimum spanning tree $T$ in this graph. Suppose we squared the cost of each edge $e \in E$, i.e. let $c'_e = c_e^2$. Is $T$ still a MST with these new edge weights? If yes, provide a brief explanation; if no, provide a counterexample.
