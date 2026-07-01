@@ -67,7 +67,7 @@ Given a 3CNF $\phi$ of $m$ clauses and $n$ variables, we create a graph $G$ that
 
 We argue that this reduction takes polynomial time. For each of the $m$ clauses, we create 3 nodes and 3 edges (to connect them all together) in our graph. In addition, we connect all pair of nodes representing variables and their negation. There are at most $(3m)^2 = O(m^2)$ pairs possible, so we can reduce our 3SAT instance to an Independent Set instance in $O(m^2 + m) = O(m^2)$ time, which is polynomial.
 
-The intution is that each clause is represented by a gadget of "nodes" in our graph $G$. Since $k = m$ in our Independent Set instance, we must pick exactly one node from each clause gadget to be in the independent set $S$ (the triangle edges prevent picking two nodes from the same gadget). Picking a node $x_{ij}$ corresponds to setting that literal to true. The consistency edges between contradictory literal pairs ensure we never pick both a variable and its negation (which would violate the independent set property), so the assignment is well-defined and satisfies every clause.
+The intuition is that each clause is represented by a gadget of "nodes" in our graph $G$. Since $k = m$ in our Independent Set instance, we must pick exactly one node from each clause gadget to be in the independent set $S$ (the triangle edges prevent picking two nodes from the same gadget). Picking a node $x_{ij}$ corresponds to setting that literal to true. The consistency edges between contradictory literal pairs ensure we never pick both a variable and its negation (which would violate the independent set property), so the assignment is well-defined and satisfies every clause.
 
 $(\Rightarrow)$ Suppose the 3CNF $\phi$ is satisfiable. We show that a satisfying assignment of variables to a 3SAT instance implies an independent set solution to our constructed graph. Fix a satisfying assignment. For each clause $i$, at least one of its three literals is true under this assignment; pick one such true literal and include its corresponding node $x_{ij}$ in $S$. This gives $|S| = m \ge k$.
 
@@ -155,7 +155,6 @@ With the previous setup, what should our bad edge set $E_{bad}$ be?
 <details>
 <summary>Solution</summary>
 
-
 We first show that Graph Selection is in NP. Given a Graph Selection instance consisting of graph $G = (V, E)$, edge sets $E_{good}$ and $E_{bad}$, and set $C \subseteq V$, we take in a certificate set $P$ and check the following conditions. If any of them are false, we reject $P$ (outputting "no"). Otherwise, if all conditions hold, output "yes".
 - $C \in P$. This takes $O(|V|)$ time.
 - For all $v \in P$, there is a $u \in P$ such that $(u, v) \in P_{good}$. We can check this by fixing each $v \in P$ and checking through all $u \in P$ with $u \ne v$ to see if $(u, v) \in E_{good}$; if no $u \in P$ satisfies this, then we can reject $P$. We enumerate of all possible pairs in $P \subseteq V$, so we take $O(|V|^2)$ time for this check. 
@@ -223,9 +222,26 @@ Coming soon!
 Show that Partition is NP-Complete.
 
 <details>
+<summary>Hint</summary>
+
+Reduce from Subset Sum.
+
+</details>
+
+<details>
 
 <summary>Solution</summary>
 
-Coming soon!
+We first show that Partition is in NP. Given a Partition instance of $n$ large numbers $w_1, \dots, w_n$, our certificate is a set $I$. We can simply check if $\sum_{i \in I} w_i = \sum_{i \notin I} w_i$ holds (if yes, then accept; otherwise, reject this certificate). If we use $w = \max_i w_i$, then doing $O(n)$ addition operations and checking if the sums are equivalent takes $O(n \log w)$ time. This is polynomial in the input size.
+
+We show that Partition is NP-Hard by showing a reduction from Subset Sum.
+
+Let numbers $a_1, \dots, a_n$ with target sum $A$ be a Subset Sum instance. First, we add up all numbers and let $\overline{A} = \sum_{i = 1}^n a_i - A$. We assume without loss of generality that $A \ge \overline{A}$. We create an input to Partition that uses $n + 1$ numbers: $a_1, \dots, a_n$ from Subset Sum and one additional number $a_{n + 1} = A - \overline{A}$.
+
+The intuition for this reduction is as follows: if there exists such a subset $I$ such that $\sum_{i \in I} a_i = A$, then the remaining elements sum to $\overline{A} = \sum_{i = 1}^n a_i - A$. So a yes-instance of Subset Sum splits the numbers into two groups with sums $A$ and $\overline{A}$. This is almost a partition; both sides aren't always balanced, they differ by $A - \overline{A}$. Adding in an extra number $a_{n + 1} = A - \overline{A}$ closes this gap on the $\overline{A}$ side and makes the two sums equal to $A$. In other words, $a_{n + 1} = A - \overline A$ is a "balancing weight" that turns an uneven Subset Sum split into an even partitioning.
+
+$(\Rightarrow)$ Suppose there is a subset $I$ of the subset sum problem with total sum $A$. Then this subset satisfies the parition rule for the input we created. Since we have $\sum_{i = 1}^{n + 1} a_i = 2A$, the remaining items not selected in $I$ will sum to $A$. Thus, we have a solution to Partition.
+
+$(\Leftarrow)$ Suppose our constructed Partition instance has a partition of the $n + 1$ numbers with equal sums. Note that $\sum_{i = 1}^{n + 1}a_i = 2A$ implies that both sides sum to $A$. We simply chose subset $I$ to be the side of the partition not containing the newly created item $a_{n + 1}$, so $I$ is a solution to the Subset Sum problem. 
 
 </details>
