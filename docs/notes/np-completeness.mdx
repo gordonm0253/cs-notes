@@ -191,11 +191,24 @@ Proof continued soon!
 
 </details>
 
-**Problem 2**. [Monotone SAT] Consider the following variant of SAT. We say that a boolean formula is *monotone* if no variable appears negated; i.e. every literal is a positive occurence of some variable $x_i$.
+**Problem 2**. [Monotone SAT] Consider the following variant of SAT. We say that a boolean formula is *monotone* if no variable appears negated; i.e. every literal is a positive occurence of some variable $x_i$. For example, the following SAT formula is monotone:
+
+$$
+\begin{align*}
+(x_1 \lor x_2 \lor x_4) \land (x_2 \lor x_{23}) \land (x_7 \lor x_{10} \lor x_{100})
+\end{align*}
+$$
 
 We take as input a montone CNF formula $\phi = C_1 \land C_2 \land \dots \land C_n$ over variables $x_1, \dots, x_n$, where each $C_i$ consists of ORs of non-negated literals. We also take an input number $k$. The Monotone SAT decision problem asks whether $\phi$ is satisfiable by setting at most $k$ variables equal to true.
 
 Prove that Monotone SAT is NP-Complete.
+
+<details>
+<summary>Hint</summary>
+
+Use a reduction from Vertex Cover.
+
+</details>
 
 <details>
 
@@ -238,10 +251,14 @@ We show that Partition is NP-Hard by showing a reduction from Subset Sum.
 
 Let numbers $a_1, \dots, a_n$ with target sum $A$ be a Subset Sum instance. First, we add up all numbers and let $\overline{A} = \sum_{i = 1}^n a_i - A$. We assume without loss of generality that $A \ge \overline{A}$. We create an input to Partition that uses $n + 1$ numbers: $a_1, \dots, a_n$ from Subset Sum and one additional number $a_{n + 1} = A - \overline{A}$.
 
+Letting $a = \max_i a_i$, this reduction takes $O(n \log a)$, as we need to do $O(n)$ addition/subtraction operations to create our new element $a_{n + 1}$ (since these are large numbers, we take $O(\log a)$ time for each addition operation). Therefore, our reduction runs in polynomial time.
+
 The intuition for this reduction is as follows: if there exists such a subset $I$ such that $\sum_{i \in I} a_i = A$, then the remaining elements sum to $\overline{A} = \sum_{i = 1}^n a_i - A$. So a yes-instance of Subset Sum splits the numbers into two groups with sums $A$ and $\overline{A}$. This is almost a partition; both sides aren't always balanced, they differ by $A - \overline{A}$. Adding in an extra number $a_{n + 1} = A - \overline{A}$ closes this gap on the $\overline{A}$ side and makes the two sums equal to $A$. In other words, $a_{n + 1} = A - \overline A$ is a "balancing weight" that turns an uneven Subset Sum split into an even partitioning.
 
 $(\Rightarrow)$ Suppose there is a subset $I$ of the subset sum problem with total sum $A$. Then this subset satisfies the parition rule for the input we created. Since we have $\sum_{i = 1}^{n + 1} a_i = 2A$, the remaining items not selected in $I$ will sum to $A$. Thus, we have a solution to Partition.
 
 $(\Leftarrow)$ Suppose our constructed Partition instance has a partition of the $n + 1$ numbers with equal sums. Note that $\sum_{i = 1}^{n + 1}a_i = 2A$ implies that both sides sum to $A$. We simply chose subset $I$ to be the side of the partition not containing the newly created item $a_{n + 1}$, so $I$ is a solution to the Subset Sum problem. 
+
+Since we have shown Partition to be in NP and NP-Hard, this problem is NP-Complete as required. $\square$
 
 </details>
