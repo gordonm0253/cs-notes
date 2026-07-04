@@ -77,7 +77,7 @@ $(\Leftarrow)$ Suppose $G$ has an independent set $S$ with $|S| = k = m$ (we kno
 
 Define a variable assignment by setting each literal corresponding to a node in $S$ to true (if a variable has neither literal represented in $S$, then assign it arbitrarily). This assignment is well defined; if both $x_{ij}$ and $\lnot x_{i'j}$ were in $S$, it would not be an independent set because they are connected by an edge. So no variable is assigned conflicting values. Since $S$ contains one node per clause gadget, every cluase has at least one literal set to true, so every clause is satisfied. Hence $\phi$ is satisfiable.
 
-Therefore, our 3CNF $\phi$ is satisfiable if and only if $G$ has an independent set of size $k = m$, completing the reduction. Combined with the polynomial-time verifier shown earlier, Independent set is NP-complete. 
+Therefore, our 3CNF $\phi$ is satisfiable if and only if $G$ has an independent set of size $k = m$, completing the reduction. Combined with the polynomial-time verifier shown earlier, Independent Set is NP-complete. 
 
 ## Known NP-Complete Problems
 
@@ -214,9 +214,36 @@ Use a reduction from Vertex Cover.
 
 <summary>Solution</summary>
 
-Coming soon!
+We first show that Monotone SAT is in NP. Given a Monotone SAT instance with boolean formula $\phi$ (made up of clauses of only positive literals) and a parameter $k$, we take a variable assignment as our certificate. We check the following conditions: the amount of variables set to true in the assignment is less than or equal to $k$, and every clause $C_i$ is satisfied. If any of these conditions are false, we reject the certificate. Otherwise, we accept.
+
+We claim that this verifier runs in polynomial time. To check the first condition, we can perform a linear scan through all the variable assignments and count how many variables are assigned to true. For the second condition, checking each clause requires scanning its literals. For a formula with $n$ variables and $m$ clauses, this runs in $O(mn)$ time, which is polynomial. Thus, Monotone SAT is in NP.
+
+Next, we show that Monotone SAT is NP-Hard by showing a reduction from Vertex Cover.
+
+Recall the Vertex Cover problem: given a graph $G = (V, E)$ and an integer $k$, decide whether there is a set $S \subseteq V$ with $|S| \le k$ such that every edge has at least one endpoint in $S$.
+
+For our reduction, consider an instance of Vertex Cover with graph $G = (V, E)$ and parameter $k$ with $V = (v_1, \dots, v_n)$. We create a variable $x_i$ for each vertex $v_i$. For each edge $e = (v_i, v_j) \in E$, create the clause $(x_i \lor x_j)$. Then, let
+
+$$
+\begin{align*}
+\phi = \bigwedge_{(v_i, v_j) \in E} (x_i \lor x_j)
+\end{align*}
+$$
+
+and keep $k$ the same. Every literal is a positive occurence of a variable, so $\phi$ is monotone. The construction produces one variable per vertex and one clause per edge, so it runs in polynomial time.
+
+For correctness, we show that $(G, k)$ is a yes-instance of Vertex Cover iff $(\phi, k)$ is a yes-instance of Monotone SAT.
+
+$(\Rightarrow)$ Suppose $S$ is a vertex cover with $|S| \le k$. Set $x_i = $ true exactly when $v_i \in S$. This sets at most $k$ variables true. For any clause $(x_i \lor x_j)$ corresponding to edge $(v_i, v_j)$, since $S$ covers this edge, at least one of $v_i, v_j \in S$, so at least one of $x_i, x_j$ is true and the clause is satisfied. Thus, $\phi$ is satisfied with at most $k$ true variables.
+
+$(\Leftarrow)$ Suppose $\phi$ is satisfied by an assignment with at most $k$ true variables. Let $S = \{v_i: x_i = \text{true}\}. so $|S| \le k$. For any edge $(v_i, v_j)$, the clause $(x_i \lor x_j)$ is satisfied, so at least one of $x_i, x_j$ is true, meaning at least one of $v_i, v_j \in S$. Hence, $S$ covers every edge is a vertex cover of size at most $k$.
+
+Since the reduction runs in polynomial time and is correct, Vertex Cover $\le_P$ Monotone SAT, so Monotone SAT is NP-Hard.
+
+Monotone SAT is in NP and is NP-Hard, so it is NP-Complete.
 
 </details>
+
 
 **Problem 3**. [3-Coloring] Given a graph $G = (V, E)$, the 3-coloring problem asks if there is an assignment of colors to the nodes of the graph such that no two adjacent vertices have the same color, and at most 3 colors are used.
 
