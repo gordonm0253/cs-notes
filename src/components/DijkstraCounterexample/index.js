@@ -1,9 +1,9 @@
 import styles from './styles.module.css';
 
 const nodes = {
-  S: {x: 120, y: 175},
-  A: {x: 390, y: 95},
-  B: {x: 390, y: 255},
+  S: {x: 70, y: 105},
+  A: {x: 230, y: 55},
+  B: {x: 230, y: 155},
 };
 
 const edges = [
@@ -27,7 +27,7 @@ export default function DijkstraCounterexample() {
     <figure className={styles.figure}>
       <svg
         className={styles.graph}
-        viewBox="0 0 560 360"
+        viewBox="0 0 300 220"
         role="img"
         aria-labelledby="dijkstra-counterexample-title dijkstra-counterexample-description">
         <title id="dijkstra-counterexample-title">Dijkstra counterexample with a negative edge</title>
@@ -48,7 +48,7 @@ export default function DijkstraCounterexample() {
                 x2={end.x}
                 y2={end.y}
               />
-              <circle className={styles.weightHalo} cx={label.x} cy={label.y} r="24" />
+              <circle className={styles.weightHalo} cx={label.x} cy={label.y} r="14" />
               <text className={styles.weight} x={label.x} y={label.y}>
                 {edge.weight}
               </text>
@@ -57,7 +57,7 @@ export default function DijkstraCounterexample() {
         })}
         {Object.entries(nodes).map(([label, node]) => (
           <g key={label}>
-            <circle className={styles.node} cx={node.x} cy={node.y} r="34" />
+            <circle className={styles.node} cx={node.x} cy={node.y} r="20" />
             <text className={styles.nodeLabel} x={node.x} y={node.y}>
               {label}
             </text>

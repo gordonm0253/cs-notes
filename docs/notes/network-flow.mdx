@@ -77,9 +77,70 @@ Ford-Fulkerson(G, s, t, c):
     return flow f
 ```
 
-**Lemma: Augmenting preserves capacity and conservation constraints.** 
+**Lemma: Augmenting preserves capacity and conservation constraints.**
 
-Coming soon!
+Let $f$ be a valid flow, $P$ be a simple $s-t$ path in $G_f$ and $b = \text{bottleneck}(P) > 0$. Let $f'$ be the flow after augmenting $f$ with path $P$.
+
+Recall that the augment performs the following operation to forward/backward edges:
+
+- Forward edge $(u, v)$ with $e = (u, v) \in E$ with $f_e < c_e$; we set $f'(e) = f(e) + b$.
+- Backward edge $(u, v)$ with $e = (v, e) \in E$ with $f_e > 0$; we set $f'(e) = f(e) - b$.
+
+For our bottleneck $b > 0$,
+
+- $b \le c_e - f_e$ for every forward edge $e$.
+- $b \le f_e$ for every backward edge $e$.
+
+We show the capacity constraint, i.e. $0 \le f'(e) \le c_e$ for every $e \in E$.
+
+**Case 1:** $e \notin P$. This means that the edge $e$ was not augmented, so $f'(e) = f(e)$. Because $f$ is a valid flow, we have $0 \le f(e) = f'(e) \le c_e$ as required.
+
+**Case 2:** $e \in P$, $e$ is used as a forward edge. Then, $f'(e) = f(e) + b$. We have:
+
+$$
+\begin{align*}
+f'(e) &= f(e) + b \ge 0 + 0 > 0 \\
+f'(e) &= f(e) + b \le f(e) + (c_e - f(e)) = c_e
+\end{align*}
+$$
+
+where the upperbound uses $b \le c_e - f(e)$.
+
+**Case 3:** $e \in P$, $e$ is used as a backward edge. Then, $f'(e) = f(e) - b$.
+
+$$
+\begin{align*}
+f'(e) &= f(e) - b \ge f(e) - f(e) = 0 \\
+f'(e) &= f(e) - b \le f(e) \le c_e
+\end{align*}
+$$
+
+The lower bound uses $b \le f(e)$, and the upper bound uses $b > 0$.
+
+In all cases $0 \le f'(e) \le c_e$, so $f'$ satisfies the capacity constraint.
+
+Next, we show that the conservation constraint is satisfied.
+
+We fix an internal node $v \in V \setminus \{s, t\}$. Since $f$ satisfies conservation at $v$, it is enough to show the augmentation changes the total inflow and outflow at $v$ by the same amount. We denote these changes as $\delta_{in}(v)$ and $\delta_{out}(v)$.
+
+If $v \notin P$, no incident edge to $v$ is modified, so $\delta_{in}(v) = \delta_{out}(v) = 0$ and conservation is preserved.
+
+Otherwise, $v$ is an interval vertex of our path $P$, so there is exactly one incoming edge $(u, v)$ and one outgoing edge $(v, w)$ in $G_f$. Each contributes $\pm b$ to the flow on its underlying original edge.
+
+Consider the case where $(u, v)$ is a forward edge and $(v, w)$ is a backward edge. 
+
+- Since $(u, v)$ is a forward edge, we contribute $+ b$ to $\delta_{in}(v)$. 
+- Since $(v, w)$ is a backward edge (original edge is $(w, v)$), we contribute $- b$ to $\delta_{in}(v)$. 
+
+In total, we contribute $b + (- b) = 0$ to $\delta_{in}(v)$ and leave $\delta_{out}(v)$ unchanged. In this case, $\delta_{in}(v) = \delta_{out}(v)$, so conservation is preserved. As an exercise, extend this reasoning to the rest of the cases:
+
+- $(u, v)$ is a forward edge and $(v, w)$ is a forward edge.
+- $(u, v)$ is a backward edge and $(v, w)$ is a forward edge.
+- $(u, v)$ is a backward edge and $(v, w)$ is a backward edge.
+
+Thus, in every case $\delta_{in}(v) = \delta_{out}(v)$. Since $\sum_{e \text{ into } v} f(e) = \sum_{e \text{ out of } v} f(e)$ held for $f$, adding equal changes to both sides preserves the equality for $f'$. As $v$ was an arbitrary internal node, $f'$ satisfies conservation everywhere.
+
+Together, these establish that $f'$ is a valid flow.
 
 **Termination.** If all $c_e \in \mathbb{Z}$, then every residual capacity stays integral, so each bottleneck is a positive integer and value increase by at least 1 per iteration. Since value$(f) \le C := \sum_{e \text{out of } s} c_e$, the loop runs at most $C$ times.
 
@@ -89,7 +150,7 @@ Since the algorithm doesn't specify which augmenting path to pick at each step, 
 
 <FordFulkersonBadInstance />
 
-## Visualization Demo
+### Visualization Demo
 
 <FlowNetworkVisualizer />
 

@@ -11,7 +11,7 @@
 .graph {
   display: block;
   width: 100%;
-  max-width: 720px;
+  max-width: 360px;
   height: auto;
   border: 1px solid var(--ifm-color-emphasis-200);
   border-radius: 8px;
@@ -22,18 +22,18 @@
 .negativeEdge {
   stroke: var(--ifm-color-emphasis-500);
   stroke-linecap: round;
-  stroke-width: 5;
+  stroke-width: 3;
 }
 
 .negativeEdge {
   stroke: var(--negative-edge);
-  stroke-dasharray: 8 8;
+  stroke-dasharray: 5 5;
 }
 
 .weightHalo {
   fill: var(--ifm-background-surface-color);
   stroke: var(--ifm-color-emphasis-300);
-  stroke-width: 2;
+  stroke-width: 1.2;
 }
 
 .weight,
@@ -46,15 +46,15 @@
 }
 
 .weight {
-  font-size: 22px;
+  font-size: 13px;
 }
 
 .node {
   fill: var(--ifm-background-color);
   stroke: var(--ifm-color-primary);
-  stroke-width: 5;
+  stroke-width: 3;
 }
 
 .nodeLabel {
-  font-size: 30px;
+  font-size: 18px;
 }
