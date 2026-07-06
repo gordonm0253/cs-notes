@@ -244,8 +244,7 @@ Monotone SAT is in NP and is NP-Hard, so it is NP-Complete.
 
 </details>
 
-
-**Problem 3**. [3-Coloring] Given a graph $G = (V, E)$, the 3-coloring problem asks if there is an assignment of colors to the nodes of the graph such that no two adjacent vertices have the same color, and at most 3 colors are used.
+**Problem 3**. [3-Coloring] Given a graph $G = (V, E)$, the 3-Coloring problem asks if there is an assignment of colors to the nodes of the graph such that no two adjacent vertices have the same color, and at most 3 colors are used.
 
 Prove that 3-Coloring is NP-Complete.
 
@@ -256,6 +255,12 @@ Prove that 3-Coloring is NP-Complete.
 Coming soon!
 
 </details>
+
+We first show that 3-Coloring is in NP. Given a 3-Coloring instance of a graph $G = (V, E)$, we take as input to our verifier a coloring assignment $c: V \rightarrow \{1, 2, 3\}. The verifier iterates over every edge $(u, v) \in E$ and checks that $c(u) \ne c(v)$. If every edge has properly colored endpoints, accept; otherwise, reject. This runs in $O(|E|)$ time, so our verifier is indeed polynomial.
+
+We now show that 3-Coloring is NP-Hard by providing a reduction from 3SAT. Let $\phi$ be a 3CNF formula.
+
+In progress!
 
 **Problem 4**. [Partition] The input to the Partition problem is a set of $n$ large integers $w_1, \dots, w_n$. The problem is to decide if there is a subset $I \subset \{1, \dots, n\}$ such that $\sum_{i \in I} w_i = \sum_{i \notin I} w_i$.
 

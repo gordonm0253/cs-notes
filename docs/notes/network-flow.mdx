@@ -3,6 +3,7 @@ sidebar_position: 5
 ---
 
 import FlowNetworkVisualizer from '@site/src/components/FlowNetworkVisualizer';
+import FordFulkersonBadInstance from '@site/src/components/FordFulkersonBadInstance';
 
 # Network Flow
 
@@ -58,7 +59,35 @@ In other words, it is the maximum flow we can add/subtract onto any foward/backw
 
 ## Ford-Fulkerson
 
+Ford-Fulkerson repeatedly finds an augmenting path in the residual graph $G_f$ and pushes flow along it equal to its bottleneck capacity, until no augmenting path remains. After finding an augmenting path $P$ with flow $f$ and bottleneck $b$, we use the following augment operation.
 
+- For each forward edge $e \in P$: set $f(e) \leftarrow f(e) + b$.
+- For each backward edge $e \in P$ (reversing an original edge $e' \in E$): set $f(e') \leftarrow f(e') - b$.
+
+### Algorithm
+
+```
+Ford-Fulkerson(G, s, t, c):
+    f(e) = 0 for all edges
+    build residual graph G_f
+    while there is an s-t path P in G_f:
+        b = bottleneck(P)
+        f = augment(f, P, b)
+        update G_f
+    return flow f
+```
+
+**Lemma: Augmenting preserves capacity and conservation constraints.** 
+
+Coming soon!
+
+**Termination.** If all $c_e \in \mathbb{Z}$, then every residual capacity stays integral, so each bottleneck is a positive integer and value increase by at least 1 per iteration. Since value$(f) \le C := \sum_{e \text{out of } s} c_e$, the loop runs at most $C$ times.
+
+**Runtime Analysis.** Suppose for flow network graph $G = (V, E)$, let $m = |E|$. We can find augmenting paths in $O(m)$ time and augments in $O(n)$ time (each path has at most $n$ nodes). This gives $O(mC)$ time overall, since the loop can run at most $C$ times. This is only pseudo-polynomial: the runtime depends on the capacities, not just on $n$ and $m$. 
+
+Since the algorithm doesn't specify which augmenting path to pick at each step, a poor choice of paths can be extremely slow. Consider a network where an internal edge has capacity 1 but every other edge has a much larger capacity $C$. If Ford-Fulkerson happens to alternate between two augmenting paths that both route through this narrow edge, forward through it in one path and backward (canceling flow) in the next, each round trip only increases the total flow by 1, even though a smarter choice of paths would saturate the network in just two augmentations.
+
+<FordFulkersonBadInstance />
 
 ## Visualization Demo
 

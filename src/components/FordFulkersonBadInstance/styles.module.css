@@ -1,0 +1,89 @@
+.figure {
+  --flow-red: #d72638;
+
+  margin: 1.5rem 0;
+}
+
+[data-theme='dark'] .figure {
+  --flow-red: #ff7783;
+}
+
+.graph {
+  display: block;
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+}
+
+.edge {
+  fill: none;
+  stroke: var(--ifm-color-emphasis-500);
+  stroke-linecap: round;
+  stroke-width: 3;
+}
+
+.bottleneckEdge {
+  fill: none;
+  stroke: var(--flow-red);
+  stroke-linecap: round;
+  stroke-width: 3;
+}
+
+.arrowHead {
+  fill: var(--ifm-color-emphasis-500);
+}
+
+.bottleneckArrowHead {
+  fill: var(--flow-red);
+}
+
+.capacityBadge {
+  fill: var(--ifm-background-surface-color);
+  stroke: var(--ifm-color-emphasis-300);
+  stroke-width: 1.5;
+}
+
+.bottleneckBadge {
+  fill: var(--ifm-background-surface-color);
+  stroke: var(--flow-red);
+  stroke-width: 2;
+}
+
+.capacityText,
+.nodeLabel {
+  fill: var(--ifm-font-color-base);
+  font-weight: 800;
+  text-anchor: middle;
+  user-select: none;
+}
+
+.bottleneckText {
+  fill: var(--flow-red);
+  font-weight: 800;
+  text-anchor: middle;
+  user-select: none;
+}
+
+.capacityText,
+.bottleneckText {
+  font-size: 15px;
+}
+
+.node {
+  fill: var(--ifm-background-color);
+  stroke: var(--ifm-color-primary);
+  stroke-width: 3;
+}
+
+.nodeLabel {
+  font-size: 18px;
+}
+
+.caption {
+  margin-top: 0.75rem;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.9rem;
+}
