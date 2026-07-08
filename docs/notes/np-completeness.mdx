@@ -2,6 +2,8 @@
 sidebar_position: 6
 ---
 
+import ThreeSatIndependentSet from '@site/src/components/ThreeSatIndependentSet';
+
 # NP-Completeness
 
 ## Introduction
@@ -68,6 +70,10 @@ Given a 3CNF $\phi$ of $m$ clauses and $n$ variables, we create a graph $G$ that
 We argue that this reduction takes polynomial time. For each of the $m$ clauses, we create 3 nodes and 3 edges (to connect them all together) in our graph. In addition, we connect all pair of nodes representing variables and their negation. There are at most $(3m)^2 = O(m^2)$ pairs possible, so we can reduce our 3SAT instance to an Independent Set instance in $O(m^2 + m) = O(m^2)$ time, which is polynomial.
 
 The intuition is that each clause is represented by a gadget of "nodes" in our graph $G$. Since $k = m$ in our Independent Set instance, we must pick exactly one node from each clause gadget to be in the independent set $S$ (the triangle edges prevent picking two nodes from the same gadget). Picking a node $x_{ij}$ corresponds to setting that literal to true. The consistency edges between contradictory literal pairs ensure we never pick both a variable and its negation (which would violate the independent set property), so the assignment is well-defined and satisfies every clause.
+
+The visualization below walks through this construction on a small 3CNF. Step through it to see the clause gadgets, triangle edges, and consistency edges appear.
+
+<ThreeSatIndependentSet />
 
 $(\Rightarrow)$ Suppose the 3CNF $\phi$ is satisfiable. We show that a satisfying assignment of variables to a 3SAT instance implies an independent set solution to our constructed graph. Fix a satisfying assignment. For each clause $i$, at least one of its three literals is true under this assignment; pick one such true literal and include its corresponding node $x_{ij}$ in $S$. This gives $|S| = m \ge k$.
 
