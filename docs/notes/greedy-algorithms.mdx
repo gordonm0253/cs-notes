@@ -147,7 +147,11 @@ with total cost $7$. We do not include $AC$, because $A$ and $C$ are already con
 
 We prove that a minimum spanning tree $T$ has no cycles.
 
+<details>
+<summary>Proof</summary>
+
 Suppose for contradiction's sake that our minimum spanning tree $T$ has a cycle. Deleting any edge $e$ from the cycle will make the MST cheaper (since all weights are positive). Furthermore, the graph remains connected after deleting an edge (the two endpoints of $e$ are still connected by the rest of the cycle). This contradicts the minimality of our claimed MST because we have a spanning tree with a lower cost; therefore, a MST cannot contain a cycle.
+</details>
 
 In the following section, we study Kruskal's and Prim's algorithm to find a graph's minimum spanning tree (MST).
 
@@ -187,15 +191,14 @@ We can implement Prim's algorithm using a min priority queue. We can extract eac
 
 <MSTVisualization />
 
-### Proof of Kruskal's Algorithm
-
-Coming soon!
 
 ### Cut Property
 
 When building a MST, we'd like a way to confirm that a particular edge must belong to it (ideally without examining every spanning tree!). This is where the cut property comes in.
 
-A **cut** of a graph $G = (V, E)$ is a partition of the vertex set into two nonempty disjoint sets $S$ and $V \setminus S$. An edge $e = (u, v)$ crosses the cut if one endpoint lies in $S$ and the other lies in $V \setminus S$.
+:::note Definition: Cut
+A **cut** of a graph $G = (V, E)$ is a partition of the vertex set into two nonempty, disjoint sets $S$ and $V \setminus S$. An edge $e = (u, v)$ **crosses** the cut if one endpoint lies in $S$ and the other lies in $V \setminus S$.
+:::
 
 **Cut Property**. Let $(S, V \setminus S)$ be any cut of a connected, weighted graph $G$. If $e$ is an edge of minimum weight among all edges crossing the cut, then there exists a minimum spanning tree of $G$ that contains $e$. If all edge weights are distinct, this strengthens to: every MST contains $e$.
 
@@ -207,7 +210,7 @@ Proof: Let $T$ be any MST $G$, and suppose $T$ does not contain $e = (u, v)$.
 4. Form $T' = T - e' + e$. Removing $e'$ from $T$ splits it into two components; adding $e$ reconnects them (since $e$ also crosses the cut), so $T'$ is again a spanning tree.
 5. Let $w(T)$ be the total edge weight of spanning tree $T$. We have that $w(T') = w(T) - c_{e'} + c_e \le w(T)$
 
-Since $T$ was minimum, $w(T') \ge w(T)$ as well, so $w(T') = w(T)$, meaning $T'$ is also an MSt, and it contains $e$.
+Since $T$ was minimum, $w(T') \ge w(T)$ as well, so $w(T') = w(T)$, meaning $T'$ is also an MST, and it contains $e$.
 
 To prove the stengthening of our claim, now assume that all edge weights are distinct. Suppose for contradiction's sake that some MST $T$ does not contain $e$. Consider a similar argument with the path $P$, crossing edge $e' \ne e$, and the inequality $c_{e} \le c_{e'}$ (since $e$ is the minimum cost edge crossing that cut). Since weights are distinct and $e \ne e'$, the previous inequality is strict:
 
@@ -224,6 +227,27 @@ w(T') = w(T) - c_{e'} + c_{e} < w(T)
 $$
 
 so $T'$ is a spanning tree with less total edge weight than $T$, contradicting the minimality of $T$. Hence, every MST must contain $e$.
+
+
+### Proof of Prim's Algorithm
+
+Now we prove the correctness of Prim's algorithm using an exchange argument. Let $A = \{e_1, e_2, \dots, e_{n - 1}\}$ be the edges selected by Prim's algorithm, in the order they were added, and let $S_k$ denote the set of vertices spanned by $\{e_1, \dots, e_k\}$ (so $S_0 = \{s\}$). Let $O$ be any MST. If $A = O$, we are done. Otherwise, consider the case $A \ne O$.
+
+Since $A \ne O$, there is some smallest index $k$ such that $e_k \notin O$ (so $e_1, \dots, e_{k-1} \in O$, but $e_k \notin O$). Write $e_k = (u, v)$ with $u \in S_{k-1}$ and $v \notin S_{k-1}$; by definition of Prim's algorithm, $e_k$ is a minimum-weight edge crossing the cut $(S_{k-1}, V \setminus S_{k-1})$.
+
+Since $O$ is a spanning tree, there is a unique path $P$ from $u$ to $v$ in $O$. Since $u \in S_{k-1}$ and $v \notin S_{k-1}$, $P$ must cross the cut $(S_{k-1}, V\setminus S_{k-1})$ at some edge $e'$. Because $e_k$ is a minimum-weight edge crossing this cut, we have $c_{e_k} \le c_{e'}$.
+
+Note also that $e' \ne e_i$ for any $i < k$: each $e_i$ (for $i < k$) has both endpoints in $S_{k-1}$, so it cannot cross the cut, while $e'$ does.
+
+Now form $T' = O - e' + e_k$. Since $e'$ lies on the path between $u$ and $v$ in $O$, removing it separates $u$ from $v$; adding $e_k = (u,v)$ back reconnects them, so $T'$ is again a spanning tree. Its weight is
+
+$$
+w(T') = w(O) - c_{e'} + c_{e_k} \le w(O).
+$$
+
+Since $O$ is optimal, $w(T') \ge w(O)$ as well, so $w(T') = w(O)$, meaning $T'$ is also an MST. Moreover, since $e' \ne e_1, \dots, e_{k-1}$, none of these edges were removed, so $T'$ contains $e_1, \dots, e_{k-1}, e_k$: one more edge of $A$ than $O$ did.
+
+We can repeat this process: at each step, we exchange one edge of our current optimal tree for the next edge of $A$ it disagrees on, strictly increasing the number of edges shared with $A$ while preserving optimality. Since there are only $n-1$ edges total, this process terminates after at most $n-1$ exchanges, at which point our tree equals $A$ exactly. Since every tree produced along the way is an MST, $A$ is an MST.
 
 ## Practice
 
