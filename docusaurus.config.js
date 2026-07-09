@@ -102,6 +102,31 @@ const config = {
                 label: 'Dynamic Programming',
                 to: '/docs/notes/dynamic-programming',
               },
+              {
+                label: 'Divide and Conquer',
+                to: '/docs/notes/divide-and-conquer',
+              },
+            ],
+          },
+          {
+            title: 'More Topics',
+            items: [
+              {
+                label: 'Network Flow',
+                to: '/docs/notes/network-flow',
+              },
+              {
+                label: 'NP-Completeness',
+                to: '/docs/notes/np-completeness',
+              },
+              {
+                label: 'Approximation Algorithms',
+                to: '/docs/notes/approximation-algorithms',
+              },
+              {
+                label: 'Computability',
+                to: '/docs/notes/computability',
+              },
             ],
           },
         ],
