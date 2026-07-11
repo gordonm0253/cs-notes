@@ -228,7 +228,6 @@ $$
 
 so $T'$ is a spanning tree with less total edge weight than $T$, contradicting the minimality of $T$. Hence, every MST must contain $e$.
 
-
 ### Proof of Prim's Algorithm
 
 Now we prove the correctness of Prim's algorithm using an exchange argument. Let $A = \{e_1, e_2, \dots, e_{n - 1}\}$ be the edges selected by Prim's algorithm, in the order they were added, and let $S_k$ denote the set of vertices spanned by $\{e_1, \dots, e_k\}$ (so $S_0 = \{s\}$). Let $O$ be any MST. If $A = O$, we are done. Otherwise, consider the case $A \ne O$.
