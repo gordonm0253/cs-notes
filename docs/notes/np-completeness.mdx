@@ -37,9 +37,13 @@ NP-completeness proofs are an important part of CS4820, and they are sure to sho
 - $(\Rightarrow)$ If $x$ is a yes-instance of $X$, then $f(x)$ is a yes-instance of $A$. Typically, you show this by taking an arbitrary solution to $x$ and explicitly constructing a corresponding solution to $f(x)$.
 - $(\Leftarrow)$ If $f(x)$ is a yes-instance of $A$, then $x$ is a yes-instance of $X$. You show this by taking a solution to $f(x)$ and explicitly constructing a corresponding solution to $x$. This is often the harder direction, since you need to consider all possible solutions to $f(x)$ (not just the ones you had in mind while making the reduction construction).
 
-:::note
-Please do not reduce the wrong way! If you do, you will probably lose a lot of points...
-:::
+### On the Direction of the Reduction
+
+The most common way to lose points on an NP-completeness proof is to reduce the wrong way. If the reduction direction is flipped, then the entire content of the argument will be incorrect.
+
+Recall what NP-hardness of $A$ requires: a reduction $X \le_P A$ from a known NP-hard problem $X$ into your target $A$. The operational meaning is that a fast algorithm for $A$ would yield a fast algorithm for $X$ (compute reduction $f(x)$, then call a solver for $A$). Since $X$ is already known to be hard, this transfers that hardness onto $A$.
+
+Reducing the other way, $A \le_P X$, proves the opposite kind of statement. It says a fast algorithm for $X$ would solve $A$; that is, $A$ is *no harder than* $X$. This is an upper bound on $A$'s difficulty, not a lower bound. It places no floor on how hard $A$ is, so it establishes nothing about NP-hardness.
 
 ## Example Problem: Independent Set
 
