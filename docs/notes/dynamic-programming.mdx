@@ -68,6 +68,8 @@ Remember to include these steps in your runtime analysis!
 
 ## Bellman-Ford
 
+### Introduction
+
 Consider the single-source shortest path problem: given a weighted directed graph $G=(V,E)$ and a source node $s$, find the shortest path from $s$ to every other vertex. Dijkstra's algorithm solves this greedily, but fails on graphs with negative edge weights. Consider the following graph, where we let our source node be $S$.
 
 <DijkstraCounterexample />
@@ -75,6 +77,8 @@ Consider the single-source shortest path problem: given a weighted directed grap
 If we use Dijkstra's algorithm to find the shortest path from $S$ to $A$, we would greedily select the edge from $S$ to $A$ with weight $2$ and be done. However, we observe that the least cost path is $S \rightarrow B \rightarrow A$ (total cost $5 + (-4) = 1$). 
 
 This failure of Dijkstra's algorithm motivates the Bellman-Ford algorithm, which handles negative edge weights by reformulating shortest paths as a DP problem. We add the constraint that the input graph $G$ has no negative weight cycles (otherwise there is no shortest path, as we could repeatedly take the cycle path to lower our overall cost).
+
+### The Algorithm
 
 We first observe that any shortest path in the graph with $n = |V|$ nodes uses at most $n - 1$ edges. A simple path cannot repeat vertices; a non-sample path would contain a cycle, which either has positive cost (and can be removed) or negative cost (contradicting our negative-cost cycle assumption).
 
@@ -102,14 +106,62 @@ since each edge $(u, v) \in E$ contributes one or two computations (depending on
 
 <BellmanFordVisualizer />
 
-
 ## Segmented Least Squares
 
+### Introduction
+
+Given points in the plane, we often want to describe their trend by fitting a line. The classic least squares line has a clean closed form of minimizing the squared distance between points and the line, but a single line isn't always a good model: data that rises, levels off, then climbs again is captured far better by a sequence of line segments.
+ 
+This creates a tradeoff. More segments always lower the total error (with $n$ point and $n - 1$ segments connecting each consecutive pair of points, our squared error is zero), but such a fit just memorizes the data. We want *few* segments and *low* error at the same time. The segmented least squares problem formalizes and solves this balance.
+
+For points $(x_1, y_1), \dots, (x_n, y_n)$ and a line $L : y = ax + b$, the **least squares error** is the sum of squared vertical distances:
+ 
+$$
+\text{Error}(L) = \sum_{i = 1}^{n} \left(y_i - a x_i - b\right)^2.
+$$
+ 
+Setting the partials with respect to $a$ and $b$ to zero gives the minimizing line in closed form:
+ 
+$$
+a = \frac{n \sum_i x_i y_i - \left(\sum_i x_i\right)\left(\sum_i y_i\right)}{n \sum_i x_i^2 - \left(\sum_i x_i\right)^2},
+\qquad
+b = \frac{\sum_i y_i - a \sum_i x_i}{n}.
+$$
+
+The main takeaway from this is that for any group of points, the minimum single-line error can be computed quickly.
+
+We are given points $P = \{(x_1, y_1), \dots, (x_n, y_n)\}$ with $x_1 < \dots < x_n$. A solution partitions them into contiguous segments, fitting one line per segment. Writing $e(S)$ for the minimum single-line error on segment $S$, and charging a fixed penalty $C > 0$ per segment, the **cost** of a partition is
+
+$$
+\sum_{\text{segments } S} e(S) \; + \; C \cdot (\text{number of segments}).
+$$
+ 
+Design a polynomial time algorithm to find a partition minimizing this cost. Observe that having large $C$ favors a coarse fit, while small $C$ tolerates more segments. In addition, the brute force algorithm requires trying all $2^n - 1$ partitions, which is far too slow. 
+
+### The Algorithm
+
+Let $p_i$ refer to point $(x_i, y_i)$. Consider the last point $p_n$. It sits in some segment, which (by contiguity) must be $p_i, \dots, p_n$ for some $i \le n$. Once we fix where that segment starts, the points $p_1, \dots, p_{i-1}$ form an independent instance of the same problem. That substructure gives the DP relation.
+
+Let $e_{i,j}$ be the minimum single-line error on $p_i, \dots, p_j$, and let $\text{OPT}(j)$ be the optimal cost for the first $j$ points. We try every possible starting point $i$ for the final segment:
+
+$$
+\text{OPT}(j) = \min_{1 \le i \le j} \Big( e_{i,j} + C + \text{OPT}(i-1) \Big),
+\qquad \text{OPT}(0) = 0.
+$$
+ 
+We fill in the table from $j = 1, \dots n$, and output $\text{OPT}(n)$ as our answer. To recover the segments, store the argmin $i$ at each $j$ and trace back from $n$.
+
+Precomputing all $e_{i,j}$: there are $O(n^2)$ pairs, and with prefix sums of $x_k$, $y_k$, $x_k y_k$, $x_k^2$, each error is an $O(1)$ lookup, so we take $O(n^2)$ time for the precomputations. Filling the table costs $O(j)$ per entry, which again $O(n^2)$ across all $n$ OPT entries. Thus, the overall runtime of our algorithm is $O(n^2)$.
+
 ## Knapsack Problem
+
+### Introduction
 
 The knapsack problem is a classic dynamic programming example. We have $n$ items with weight $w_i$ and value $v_i$ with an overall weight constraint $W$. We want to select some set of items $S \subseteq \{1, \dots, n\}$ such that the total weight $\sum_{i \in S} w_i \le W$ and the total value $\sum_{i \in S} v_i$ is maximized.
 
 We can't solve this greedily; taking the highest-value items or best value-to-weight ratio first can both lead to suboptimal solutions (often times a combination of smaller, lower-ratio items fits better and gives more total value). This forces us to consider some subsets; however, there are $2^n$ of them. Dynamic programming gives us a way to avoid this exponential blowup by identifying the right subproblem structure.
+
+### The Algorithm
 
 We observe that deciding whether to include item $i$ is a binary choice: we either take it or leave it. If we take it, we use $w_i$ of our capacity and gain $v_i$ in value, leaving us with a smaller knapsack on the remaining items. If we choose not to take the item, the problem reduces to the same capacity with one fewer item to consider.
 

@@ -20,15 +20,16 @@ Every divide and conquer algorithm follows the same three-step recipe:
 
 To turn this recipe into a concrete algorithm, we need to specify three things: how we split the input, what the base case is, and how we combine subresults. To reason about correctness, we typically use induction on the size of the input. We show that the base case is handled correctly, then assume the recursive calls return correct solutions on their smaller inputs (the inductive hypothesis) and argue that the combine step produces a correct solution for the full input.
 
+## Runtime Analysis
+
 Analyzing the runtime is where divide and conquer takes a bit more work than other algorithms. If a problem of size $n$ splits into $a$ subproblems each of size $n / b$, and the divide and combine steps together take $f(n)$ time, then the running time satisfies the recurrence
 
 $$
 T(n) = a \cdot T(n / b) + f(n).
 $$
 
-For mergesort, we make $a = 2$ recursive calls on inputs of size $n / 2$, and merging takes $f(n) = O(n)$ time, giving $T(n) = 2\,T(n/2) + O(n)$, which solves to $O(n \log n)$. In the sections that follow, we develop the tools to solve recurrences of this form, first by unraveling them by hand and then via the Master Theorem.
+For mergesort, we make $a = 2$ recursive calls on inputs of size $n / 2$, and merging takes $f(n) = O(n)$ time, giving $T(n) = 2\,T(n/2) + O(n)$, which solves to $O(n \log n)$. In the following section, we develop the tools to solve recurrences of this form, first by unraveling them by hand and then via the Master Theorem.
 
-## Runtime Analysis
 
 ### Unraveling Recurrences
 
