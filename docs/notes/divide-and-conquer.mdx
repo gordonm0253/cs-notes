@@ -67,11 +67,45 @@ $$
 
 Then, we consider the following 3 cases when evaluating this sum:
 
-**Case 1**: $a > b^c$
+**Case 1**: $a > b^c$. In this case, $\frac{a}{b^c} > 1$, so the terms grow and the sum is dominated by its last term. Applying the finite geometric sum formula and dropping some of the constant terms:
 
-**Case 2**: $a < b^c$
+$$
+\begin{align*}
+\sum_{i = 0}^{\log_{b} n} \left( \frac{a}{b^{c}} \right)^i = \dfrac{\left( \frac{a}{b^c} \right)^{\log_b{n} + 1} - 1}{\frac{a}{b^c} - 1} = O \left( \left( \frac{a}{b^c} \right)^{\log_b (n) + 1}  \right) = O \left( \frac{a^{\log_b (n)}}{b^{\log_b (n)}} \right) = O \left( \frac{a^{\log_b (n)}}{n} \right)
+\end{align*}
+$$
 
-**Case 3**: $a = b^c$
+We can use some math stuff to flip $a$ and $n$:
+
+$$
+\begin{align*}
+a^{\log_b (n)} = \left(b^{\log_b (a)} \right)^{\log_b (n)} = \left(b^{\log_b (n)} \right)^{\log_b (a)} = n^{\log_b (a)} \\
+\end{align*}
+$$
+
+Then, we can get a final result for our summation as:
+
+$$
+\begin{align*}
+O \left( \frac{a^{\log_b (n)}}{n} \right) = O \left( \frac{n^{\log_b (a)}}{n} \right) = O \left( n^{\log_b (a)} \right)
+\end{align*}
+$$
+
+**Case 2**: $a < b^c$. Here, $\frac{a}{b^c} < 1$, so we can upper-bound this sum by the convergence of a geometric series:
+
+$$
+\begin{align*}
+\sum_{i = 0}^{\log_{b} n} \left( \frac{a}{b^{c}} \right)^i < \sum_{i = 0}^{\infty} \left( \frac{a}{b^{c}} \right)^i = \dfrac{1}{1 - \frac{a}{b^c}}
+\end{align*}
+$$
+
+**Case 3**: $a = b^c$. In this case, $\frac{a}{b^c} = 1$. Since $1^i = 1$ for all $i \in \mathbb R$, we have:
+
+$$
+\begin{align*}
+\sum_{i = 0}^{\log_{b} n} \left( \frac{a}{b^{c}} \right)^i = \sum_{i = 0}^{\log_{b} n} \left(1 \right)^i = \log_b{(n)} + 1
+\end{align*}
+$$
 
 ### Master Theorem
 
