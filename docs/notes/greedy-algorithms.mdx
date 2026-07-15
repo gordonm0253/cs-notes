@@ -294,3 +294,16 @@ Consider swapping the order in which the two tasks are completed. We observe tha
 Since we assumed $\frac{q_i}{p_i} < \frac{q_{i+1}}{p_{i+1}}$, we have $q_i \cdot p_{i + 1} < q_{i + 1} \cdot p_{i}$. Since the decrease is larger than the increase in total cost, swapping the order in which we complete task $i$ and $i + 1$ improves our total cost. This contradicts the assumption that we started with an optimal schedule. We can repeat this argument for any pair of tasks that doesn't use the best value-per-minute ordering. Therefore, the optimal ordering is by decreasing ratio $q_i / p_i$.
 
 </details>
+
+**Problem 3**. [Tunneling Dilemma] Caleb recently opened a new aquarium with a star attraction orca whale. The orca is showcased in any one of the aquarium's $n$ tanks. Lifting the orca out of the water by crane and transporting it from tank to tank is stressful and risky, so Caleb wants it to be able to swim between any two tanks instead.
+
+For any pair of tanks $i \ne j$ with $1 \le i, j \le n$, Caleb can build a tunnel between them at construction cost $c_{ij} > 0$. The orca can swim through any tunnel he builds, in either direction, and may pass through intermediate tanks on the way. Caleb wants to choose a set of tunnels $F$ so that the orca can be moved from any tank to any other tank using only tunnels in $F$, minimizing the total construction cost $\sum_{\{i, j\} \in F} c_{ij}$.
+
+Give a polynomial time algorithm that takes as input the costs $c_{ij}$ and outputs a minimum-cost set of tunnels meeting Caleb's requirement.
+
+<details>
+<summary>Solution</summary>
+
+Coming soon!
+
+</details>

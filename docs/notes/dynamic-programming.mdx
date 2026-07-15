@@ -249,7 +249,20 @@ To find our solution, we fill in our $n \times m$ sized OPT table. We fill out e
 
 </details>
 
-**Problem 2.** [Increasing Subsequence] Given an array of $n$ integers $a_1, \dots, a_n$, determine the longest increasing subsequency in the array, i.e. the longest subsequence where every element is larger than the previous one.
+**Problem 2.** [Lunch Selection] David loves sushi! Fortuantely, right outside of his house, there is a restaurant that sells both salmon and tuna rolls. Every day for lunch across $n$ days, he must choose to eat exactly one of the tuna or salmon rolls. He will gain a satisfaction reward $s_i > 0$ for eating a salmon roll and $t_i > 0$ for eating a tuna roll on day $1 \le i \le n$.
+
+Unfortunately, the restaurant's salmon supply is limited, so David refuses to eat salmon on two consecutive days: if he eats a salmon roll on day $i$, he MUST eat a tuna roll of day $i + 1$ (there is no such restriction on tuna). Subject to this constraint, he wants to maximize his total satisfaction $\sum_{r_i(x_i)}$, where $x_i \in \{S, T\}$ is his choice on day $i$, $r_i(S) = s_i$, and $r_i(T) = t_i$.
+
+Given an algorithm that takes as input $s_1, \dots, s_n$ and $t_1, \dots, t_n$ and outputs the maximum total satisfiaction David can achieve subject to the constraint above. Your algorithm should run in $O(n)$ time.
+
+<details>
+<summary>Solution</summary>
+
+Coming soon!
+
+</details>
+
+**Problem 3.** [Increasing Subsequence] Given an array of $n$ integers $a_1, \dots, a_n$, determine the longest increasing subsequency in the array, i.e. the longest subsequence where every element is larger than the previous one.
 
 Recall that a subsequence is a sequence that can be derived from an array by deleting some elements without changing the order of the remaining elements.
 
@@ -266,7 +279,7 @@ Coming soon!
 
 </details>
 
-**Problem 3.** [Edit Distance] We define the edit distance between two strings to be the minimum number of operations required to transform one string into another using the following operations.
+**Problem 4.** [Edit Distance] We define the edit distance between two strings to be the minimum number of operations required to transform one string into another using the following operations.
 
 - Add a character to the string.
 - Remove one character from the string.
