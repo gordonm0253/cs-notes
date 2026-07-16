@@ -302,8 +302,37 @@ For any pair of tanks $i \ne j$ with $1 \le i, j \le n$, Caleb can build a tunne
 Give a polynomial time algorithm that takes as input the costs $c_{ij}$ and outputs a minimum-cost set of tunnels meeting Caleb's requirement.
 
 <details>
+<summary>Hint</summary>
+
+Can we represent the problem as a graph? Can we apply one of our MST algorithm to it?
+
+</details>
+
+<details>
 <summary>Solution</summary>
-
-Coming soon!
-
+ 
+Let $G$ be the complete graph on the $n$ tanks with edge weights $c_{ij}$. Run Kruskal's algorithm on $G$ and output the resulting tree $T$.
+ 
+Correctness
+ 
+Write $c(F) = \sum_{\{i,j\} \in F} c_{ij}$, and call $F$ *feasible* if the orca can reach any tank from any other using only tunnels in $F$. Since tunnels are bidirectional and the orca may pass through intermediate tanks, $F$ is feasible exactly when $(V, F)$ is connected.
+ 
+:::tip[Claim]
+Some optimal feasible set is a spanning tree of $G$.
+:::
+ 
+**Proof.** Feasible sets exist since $G$ is complete, so let $F$ be optimal. It is connected. Suppose it contained a cycle $C$, and let $e = \{x, y\} \in C$. Then $(V, F - e)$ is still connected: any path using $e$ can be rerouted along the $x$-$y$ path $C - e$, giving a walk and hence a path. So $F - e$ is feasible with
+ 
+$$
+c(F - e) = c(F) - c_e < c(F)
+$$
+ 
+since $c_e > 0$, contradicting optimality. Thus $F$ is connected and acyclic, i.e. a spanning tree. $\blacksquare$
+ 
+Every spanning tree is connected and hence feasible, so by the Claim the minimum over feasible sets equals the minimum over spanning trees. Kruskal is correct, so $T$ attains the latter, and $T$ is feasible. Hence $T$ is optimal.
+ 
+Running time
+ 
+$G$ has $m = \binom{n}{2} = O(n^2)$ edges, so Kruskal runs in $O(m \log m) = O(n^2 \log (n^2)) = O(n^2 \log n)$, which is polynomial.
+ 
 </details>
