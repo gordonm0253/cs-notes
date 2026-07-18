@@ -282,14 +282,13 @@ We initialize our DP table with base cases $\text{dp}[1][S] = s_1$ and $\text{dp
  
 **Runtime.** Each of the $2n$ states is computed in $O(1)$ from the previous day's two values, so the algorithm runs in $O(n)$ time and $O(1)$ space (since we only need day $i - 1$'s values to compute day $i$'s values, we can simply keep two variables that are overwritten at each iteration). If instead we wanted to reconstruct the sequence of optimal choices David made, we would need to store a full array (which is $O(n)$ space).
 
-
 </details>
 
-**Problem 3.** [Increasing Subsequence] Given an array of $n$ integers $a_1, \dots, a_n$, determine the longest increasing subsequency in the array, i.e. the longest subsequence where every element is larger than the previous one.
+**Problem 3.** [Increasing Subsequence] Given an array of $n$ integers $a_1, \dots, a_n$, determine the longest increasing subsequency in the array, i.e. the longest subsequence where every element is strictly greater than the previous one.
 
 Recall that a subsequence is a sequence that can be derived from an array by deleting some elements without changing the order of the remaining elements.
 
-Output a polynomial time algorithm that finds longest increasing subsequence of an array.
+Output a polynomial time algorithm that finds longest increasing subsequence of an array. If multiple answers exist, output any one of them.
 
 **Example:** `7 3 5 3 6 2 9 8`
 
@@ -298,23 +297,46 @@ The longest increasing subsequence of this array is `3 5 6 9` (other subsequence
 <details>
 <summary>Solution</summary>
 
-Coming soon!
+For our subproblem, we let $OPT[i]$ be the length of longest increasing subsequence ending with element $a_i$.
 
-</details>
+For our recurrence, we note that any increasing subsequence ending at $a_i$ is formed by appending $a_i$ to some increasing subsequence ending at an earlier element $a_j$ with $j < i$ and $a_j < a_i$ (the dummy element $a_0$ covers the case where $a_i$ starts a fresh subsequence). We pick the predecessor $j$ maximizing $OPT[j]$:
 
-**Problem 4.** [Edit Distance] We define the edit distance between two strings to be the minimum number of operations required to transform one string into another using the following operations.
+$$
+OPT[i] = \max_{0 \le j \le i - 1,\; a_j < a_i} \left( OPT[j] \right) + 1
+$$
 
-- Add a character to the string.
-- Remove one character from the string.
-- Replace one character in the string.
+We let our base case be $OPT[0] = 0$ with dummy element $a_0 = \min(a_1, \dots, a_n) - 1$ (this ensures that we can create a new increasing subsequence of length $1$ with each element $a_i$).
 
-Given two strings, one of length $n$ and one of length $m$, calculate the edit distance between them.
+$OPT[i]$ is the length of the best increasing subsequence ending at $a_i$, so the length of the overall longest increasing subsequence is
 
-Example: the edit distance between TACK and TRACE is 2, because we can insert an R between T and A, and then add E at the end.
+$$
+\max_{1 \le i \le n} OPT[i].
+$$
 
-<details>
-<summary>Solution</summary>
+To output an actual subsequence and not just its length (reconstruct the sequence), store the maximizing predecessor for each $i$:
 
-Coming soon!
+$$
+\mathrm{prev}[i] = \operatorname*{arg\,max}_{0 \le j \le i-1,\; a_j < a_i} OPT[j].
+$$
 
+Let $i^\star = \operatorname*{arg\,max}_{i} OPT[i]$. Follow the chain
+$i^\star,\ \mathrm{prev}[i^\star],\ \mathrm{prev}[\mathrm{prev}[i^\star]],\ \dots$
+until reaching the dummy index $0$, collect the real elements, and reverse them.
+
+**Running time.** We fill $OPT[1], \dots, OPT[n]$ in increasing order of $i$,
+and each $OPT[i]$ scans all $j < i$, giving
+$\sum_{i=1}^{n} O(i) = O(n^2)$ total, which is polynomial. Reconstruction adds
+$O(n)$.
+
+:::note Faster algorithm
+
+The $O(n^2)$ DP already satisfies the polynomial-time requirement, but there is
+a standard $O(n \log n)$ improvement. Maintain an array $t$ where $t[\ell]$ is
+the smallest possible tail value among all increasing subsequences of length
+$\ell$ found so far. For each $a_i$, binary search for the first entry
+$\ge a_i$ (strict increase) and overwrite it, or append $a_i$ if no such entry
+exists. The array $t$ stays sorted throughout, and its final length is the LIS
+length; predecessor pointers recover the subsequence as before.
+
+:::
 </details>
