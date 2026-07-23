@@ -189,15 +189,45 @@ We run Graph-Selection on this input and output whatever it outputs. This reduct
 
 We now show that the original 3SAT instance $\phi$ has a solution iff this instance of Graph-Selection has a solution.
 
-$(\Rightarrow)$ Suppose our 3SAT instance $\phi$ is satisfiable. Fix a satisfying assignment of variables. We let our set $P_0$ be:
+$(\Rightarrow)$ Satisfiable $\phi$ gives a valid $P$
 
+Fix a satisfying assignment and let
+ 
 $$
-\begin{align*}
-P_0 = C \cup \{t_i \mid x_i \text{ set to TRUE} \} \cup \{f_i \mid x_i \text{ set to FALSE} \}
-\end{align*}
+P_0 \;=\; C \;\cup\; \{\, t_i : x_i \text{ TRUE} \,\} \;\cup\; \{\, f_i : x_i \text{ FALSE} \,\}.
 $$
+ 
+**Condition 1.** $C \subseteq P_0$ by construction.
+ 
+**Condition 2.** Let $v \in P_0$.
+ 
+- If $v = c_j$: the assignment satisfies $C_j$, so some literal $\ell$ of $C_j$ is true. Let $w$ be its node ($t_i$ if $\ell = x_i$, else $f_i$). Then $(c_j, w) \in E_{good}$ by construction, and $w \in P_0$ since $\ell$ is true.
+- If $v$ is a literal node: after preprocessing its literal occurs in some clause $C_j$, so $(c_j, v) \in E_{good}$ and $c_j \in C \subseteq P_0$.
 
-Proof continued soon!
+**Condition 3.** $E_{bad} = \{(t_i,f_i)\}_{i=1}^{n}$, and the assignment gives each $x_i$ exactly one value, so at most one of $t_i, f_i$ lies in $P_0$. No bad edge has both endpoints in $P_0$.
+ 
+Hence $P_0$ is a valid selection.
+ 
+$(\Leftarrow)$ A valid $P$ gives a satisfying assignment
+ 
+Given a valid $P$, define
+ 
+$$
+x_i = \text{TRUE} \iff t_i \in P.
+$$
+ 
+This is well defined, and it assigns every variable. Observe that $f_i \in P$ forces $t_i \notin P$, since $(t_i, f_i) \in E_{bad}$ and $P$ satisfies condition 3. So
+ 
+$$
+f_i \in P \;\Longrightarrow\; x_i = \text{FALSE} \;\Longrightarrow\; \lnot x_i \text{ is true.}
+$$
+ 
+Fix a clause $C_j$. Since $c_j \in C \subseteq P$, condition 2 gives some $u \in P$ with $(u, c_j) \in E_{good}$. Every good edge at $c_j$ leads to a node of one of $C_j$'s three literals, so $u$ is such a node.
+ 
+- $u = t_i$: then $x_i = \text{TRUE}$, and the edge exists only because the literal $x_i$ occurs in $C_j$. Clause satisfied.
+- $u = f_i$: then $x_i = \text{FALSE}$ by the observation, and $\lnot x_i$ occurs in $C_j$. Clause satisfied.
+
+Every clause is satisfied, so $\phi$ is satisfiable.
 
 </details>
 
