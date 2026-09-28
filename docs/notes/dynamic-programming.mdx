@@ -319,24 +319,13 @@ $$
 \mathrm{prev}[i] = \operatorname*{arg\,max}_{0 \le j \le i-1,\; a_j < a_i} OPT[j].
 $$
 
-Let $i^\star = \operatorname*{arg\,max}_{i} OPT[i]$. Follow the chain
-$i^\star,\ \mathrm{prev}[i^\star],\ \mathrm{prev}[\mathrm{prev}[i^\star]],\ \dots$
-until reaching the dummy index $0$, collect the real elements, and reverse them.
+Let $i^\star = \operatorname*{arg\,max}_{i} OPT[i]$. Follow the chain $i^\star,\ \mathrm{prev}[i^\star],\ \mathrm{prev}[\mathrm{prev}[i^\star]],\ \dots$ until reaching the dummy index $0$, collect the real elements, and reverse them.
 
-**Running time.** We fill $OPT[1], \dots, OPT[n]$ in increasing order of $i$,
-and each $OPT[i]$ scans all $j < i$, giving
-$\sum_{i=1}^{n} O(i) = O(n^2)$ total, which is polynomial. Reconstruction adds
-$O(n)$.
+**Running time.** We fill $OPT[1], \dots, OPT[n]$ in increasing order of $i$, and each $OPT[i]$ scans all $j < i$, giving $\sum_{i=1}^{n} O(i) = O(n^2)$ total, which is polynomial. Reconstruction adds $O(n)$.
 
 :::note Faster algorithm
 
-The $O(n^2)$ DP already satisfies the polynomial-time requirement, but there is
-a standard $O(n \log n)$ improvement. Maintain an array $t$ where $t[\ell]$ is
-the smallest possible tail value among all increasing subsequences of length
-$\ell$ found so far. For each $a_i$, binary search for the first entry
-$\ge a_i$ (strict increase) and overwrite it, or append $a_i$ if no such entry
-exists. The array $t$ stays sorted throughout, and its final length is the LIS
-length; predecessor pointers recover the subsequence as before.
+The $O(n^2)$ DP already satisfies the polynomial-time requirement, but there is a standard $O(n \log n)$ improvement. Maintain an array $t$ where $t[\ell]$ is the smallest possible tail value among all increasing subsequences of length $\ell$ found so far. For each $a_i$, binary search for the first entry $\ge a_i$ (strict increase) and overwrite it, or append $a_i$ if no such entry exists. The array $t$ stays sorted throughout, and its final length is the LIS length; predecessor pointers recover the subsequence as before.
 
 :::
 </details>
@@ -358,6 +347,8 @@ The set of remaining coins is always a contiguous block, so can we index our sub
 
 <details>
 <summary>Solution</summary>
+
+Every move deletes an endpoint, so the remaining coins always form a contiguous block $a_i, \dots, a_j$, leaving $O(n^2)$ states rather than $2^n$.
 
 Coming soon!
 
